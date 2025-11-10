@@ -1,0 +1,26 @@
+# spring.application.name=backend
+spring:
+    datasource:
+        # PostgreSql Example
+        url: jdbc:postgresql://localhost:5432/project1  #exampl postgresql connection string
+        username: postgres                           #whatever username used in your postgresql connection
+        password: Kakashi8!                               #whatever password used in your postgresql connection
+
+        # url: jdbc:h2:mem:moviesdb       # name your db - if you want to persist: jdbc:h2:file:[file-path]   
+        # username: sa                    # default username for h2
+        # password:                       # optional for h2
+        # driver-class-name: org.h2.Driver #JDBC connection driver
+    
+    jpa:
+        database-platform: org.hibernate.dialect.PostgreSQLDialect
+    #     #database-platform: org.hibernate.dialect.H2Dialect      # tells JPA to use H2
+        defer-datasource-initialization: true                   #tells JPA to wait until hibernate is initialized before loading h2 data
+
+    output:
+        ansi:
+            enabled: always
+# sets your logging level - default is INFO
+logging:
+    level:
+        com:
+            skillstorm: debug  #sets the logging level for the entire package
