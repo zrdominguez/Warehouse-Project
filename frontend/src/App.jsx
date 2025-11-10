@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import "./App.css"
 
 export default function App() {
 
@@ -12,8 +13,8 @@ export default function App() {
 
 
   return (
-    <div>
-        <h1 className=''>Fullstack App</h1>
+    <div className='flex flex-col justify-center items-center h-screen'>
+        <h1 className='font-bold text-blue-600'>Fullstack App</h1>
         <p>{message}</p>
     </div>
   )
