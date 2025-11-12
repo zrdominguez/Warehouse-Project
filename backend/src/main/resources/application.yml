@@ -15,7 +15,10 @@ spring:
         database-platform: org.hibernate.dialect.PostgreSQLDialect
     #     #database-platform: org.hibernate.dialect.H2Dialect      # tells JPA to use H2
         defer-datasource-initialization: true                   #tells JPA to wait until hibernate is initialized before loading h2 data
-
+    sql:
+        init:
+            mode: always
+            platform: postgresql
     output:
         ansi:
             enabled: always
