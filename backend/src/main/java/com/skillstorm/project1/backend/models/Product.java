@@ -1,11 +1,13 @@
 package com.skillstorm.project1.backend.models;
 
 import java.time.LocalDateTime;
-
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 import com.skillstorm.project1.backend.models.enums.ProductType;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -13,6 +15,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
@@ -43,14 +46,17 @@ public class Product {
     
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;
+
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<SectionProduct> sectionProducts = new HashSet<>();
+    
+    public Product() {
+    }
     
     public Product(String name, ProductType productType, String description) {
         this.name = name;
         this.productType = productType;
         this.description = description;
-    }
-
-    public Product() {
     }
 
     //When Entity is associated with the DB run this
@@ -94,6 +100,10 @@ public class Product {
     public LocalDateTime getUpdatedAt() {
         return updatedAt;
     }
+    
+    public Set<SectionProduct> getSectionProducts() {
+        return sectionProducts;
+    }
 
     public void setName(String name) {
         this.name = name;
@@ -125,6 +135,4 @@ public class Product {
         return "Product [id=" + id + ", name=" + name + ", sku=" + sku + ", productType=" + productType
         + ", description=" + description + ", createdAt=" + createdAt + "]";
     }
-
-    
 }
