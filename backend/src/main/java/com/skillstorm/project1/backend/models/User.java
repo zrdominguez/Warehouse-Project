@@ -37,11 +37,7 @@ public class User {
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;
     
-    public User(String username, String hashedPassword, String email, boolean isAdmin) {
-        this.username = username;
-        this.hashedPassword = hashedPassword;
-        this.email = email;
-        this.isAdmin = isAdmin;
+    public User() {
     }
     
     public User(String username, String hashedPassword, String email) {
@@ -50,7 +46,11 @@ public class User {
         this.email = email;
     }
     
-    public User() {
+    public User(String username, String hashedPassword, String email, boolean isAdmin) {
+        this.username = username;
+        this.hashedPassword = hashedPassword;
+        this.email = email;
+        this.isAdmin = isAdmin;
     }
 
     @PrePersist

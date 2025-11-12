@@ -49,22 +49,22 @@ public class Warehouse {
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;
 
-    public Warehouse(User user, String name, WarehouseType warehouseType, int capacity, String location) {
-        this.user = user;
-        this.name = name;
-        this.warehouseType = warehouseType;
-        this.capacity = capacity;
-        this.location = location;
+    public Warehouse() {
     }
-
+    
     public Warehouse(User user, String name, WarehouseType warehouseType, String location) {
         this.user = user;
         this.name = name;
         this.warehouseType = warehouseType;
         this.location = location;
     }
-
-    public Warehouse() {
+    
+    public Warehouse(User user, String name, WarehouseType warehouseType, int capacity, String location) {
+        this.user = user;
+        this.name = name;
+        this.warehouseType = warehouseType;
+        this.capacity = capacity;
+        this.location = location;
     }
 
     @PrePersist
