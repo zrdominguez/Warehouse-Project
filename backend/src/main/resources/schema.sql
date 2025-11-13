@@ -19,7 +19,7 @@ CREATE TABLE PRODUCTS(
     id SERIAL PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
     sku VARCHAR(10) NOT NULL,
-    product_type VARCHAR(40) NOT NULL CHECK(product_type IN ('String', 'Brass', 'Percussion', 'Other')),
+    product_type VARCHAR(40) NOT NULL CHECK(product_type IN ('STRING', 'BRASS', 'PERCUSSION', 'OTHER')),
     description TEXT NOT NULL,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
@@ -29,7 +29,7 @@ CREATE TABLE WAREHOUSES(
     id SERIAL PRIMARY KEY,
     user_id INTEGER REFERENCES USERS(id) ON DELETE CASCADE,
     name VARCHAR(100) NOT NULL DEFAULT 'Untitled',
-    warehouse_type VARCHAR(40) NOT NULL CHECK(warehouse_type IN ('Instruments')),
+    warehouse_type VARCHAR(40) NOT NULL CHECK(warehouse_type IN ('INSTRUMENTS')),
     capacity INTEGER DEFAULT 0,
     location VARCHAR(100) NOT NULL,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
