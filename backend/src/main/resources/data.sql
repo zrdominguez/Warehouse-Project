@@ -28,3 +28,6 @@ insert into SECTIONS_PRODUCTS (section_id, product_id, quantity, created_at) val
 insert into SECTIONS_PRODUCTS (section_id, product_id, quantity, created_at) values (3, 3, 948, '4/2/2020');
 insert into SECTIONS_PRODUCTS (section_id, product_id, quantity, created_at) values (4, 4, 738, '11/20/2011');
 insert into SECTIONS_PRODUCTS (section_id, product_id, quantity, created_at) values (5, 5, 882, '3/1/2027');
+
+
+SELECT setval('warehouses_id_seq', (SELECT COALESCE(MAX(id), 0) FROM warehouses));
