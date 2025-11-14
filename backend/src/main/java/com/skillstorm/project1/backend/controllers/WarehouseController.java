@@ -4,15 +4,21 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.skillstorm.project1.backend.dto.CreateWarehouseRequest;
+import com.skillstorm.project1.backend.dto.UpdateWarehouseRequest;
 import com.skillstorm.project1.backend.models.Warehouse;
 import com.skillstorm.project1.backend.services.WarehouseService;
+import org.springframework.web.bind.annotation.PutMapping;
+
 
 @RestController
 @RequestMapping("/warehouse")
@@ -24,6 +30,7 @@ public class WarehouseController {
         this.warehouseService = warehouseService;
     }
 
+    //Show all warehouses
     @GetMapping
     public ResponseEntity<List<Warehouse>> findAllWarehouses(){
         try{
@@ -36,7 +43,8 @@ public class WarehouseController {
         }
     }
 
-    @GetMapping("/{userId}")
+    //Find all warehouses owned by a user
+    @GetMapping("user/{userId}")
     public ResponseEntity<List<Warehouse>> findAllUserWarehouses(@PathVariable int userId){
         try{
             List<Warehouse> warehouses = warehouseService.findWarehousesByOwner(userId);
@@ -48,10 +56,24 @@ public class WarehouseController {
         }
     }
 
-    @PostMapping
-    public ResponseEntity<Warehouse> createWarehouse(@RequestBody Warehouse warehouse){
+    //Find warehouse by its id
+    @GetMapping("/{warehouseId}")
+    public ResponseEntity<Warehouse> findWarehouseById(@PathVariable int warehouseId){
         try{
-            return new ResponseEntity<>(warehouseService.createWarehouse(warehouse), HttpStatus.CREATED);
+            return new ResponseEntity<>(warehouseService.findWarehouseById(warehouseId), HttpStatus.OK);
+        }catch(IllegalArgumentException e){
+            return ResponseEntity.badRequest().header("message", e.getMessage()).build();
+        }catch (Exception e){
+            return ResponseEntity.internalServerError().header("message", "Something went wrong!").build();
+        }
+    }
+
+    //create a new warehouse
+    @PostMapping
+    public ResponseEntity<Warehouse> createWarehouse(
+        @RequestBody CreateWarehouseRequest request){
+        try{
+            return new ResponseEntity<>(warehouseService.createWarehouse(request), HttpStatus.CREATED);
         }catch(IllegalArgumentException e){
             return ResponseEntity.badRequest().header("message", e.getMessage()).build();
         }catch (Exception e){
@@ -59,5 +81,27 @@ public class WarehouseController {
         }
     }
 
-    
+    //Update warehouse details
+    @PutMapping("/{warehouseId}")
+    public ResponseEntity<Warehouse> updateWarehouse(@PathVariable int warehouseId, @RequestBody UpdateWarehouseRequest request) {
+        try{
+            return new ResponseEntity<>(warehouseService.updateWarehouse(warehouseId, request), HttpStatus.OK);
+        }catch(IllegalArgumentException e){
+            return ResponseEntity.badRequest().header("message", e.getMessage()).build();
+        }catch (Exception e){
+            return ResponseEntity.internalServerError().header("message", "Something went wrong! " + e.getMessage()).build();
+        }
+    }
+
+    @DeleteMapping("/{warehouseId}")
+    public ResponseEntity<Void>  deleteWarehouse(@PathVariable int warehouseId, @RequestParam int userId){
+        try{
+            warehouseService.deleteWarehouse(warehouseId, userId);
+            return ResponseEntity.noContent().build();
+        }catch(IllegalArgumentException e){
+            return ResponseEntity.badRequest().header("message", e.getMessage()).build();
+        }catch (Exception e){
+            return ResponseEntity.internalServerError().header("message", "Something went wrong! " + e.getMessage()).build();
+        }
+    }
 }

@@ -1,6 +1,7 @@
 package com.skillstorm.project1.backend.repositories;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -15,4 +16,6 @@ public interface WarehouseRepository extends JpaRepository<Warehouse, Integer>{
     List<Warehouse> findByUser(User user);
     
     List<Warehouse> findAll();
+
+    Optional<Warehouse> findById(Integer id);
 }
