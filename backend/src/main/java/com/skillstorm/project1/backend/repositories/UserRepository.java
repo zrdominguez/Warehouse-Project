@@ -9,6 +9,6 @@ import com.skillstorm.project1.backend.models.User;
 @Repository
 public interface UserRepository extends JpaRepository<User, Integer>{
 
-    Optional<User> findById(int id);
+    Optional<User> findById(Integer id);
 
 }
