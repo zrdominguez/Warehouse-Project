@@ -113,6 +113,10 @@ public class Warehouse {
         this.name = name;
     }
 
+    public void setWarehouseType(WarehouseType warehouseType){
+        this.warehouseType = warehouseType;
+    }
+
     public void setCapacity(int capacity) {
         this.capacity = capacity;
     }
