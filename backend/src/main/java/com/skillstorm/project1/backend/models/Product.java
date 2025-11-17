@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.skillstorm.project1.backend.models.enums.ProductType;
 
 import jakarta.persistence.CascadeType;
@@ -48,6 +49,7 @@ public class Product {
     private LocalDateTime updatedAt;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
     private Set<SectionProduct> sectionProducts = new HashSet<>();
     
     public Product() {
