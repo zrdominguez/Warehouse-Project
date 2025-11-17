@@ -112,6 +112,10 @@ public class SectionProduct {
         return createdAt;
     }
     
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
     @Override
     public int hashCode() {
         return Objects.hash(section, product);
