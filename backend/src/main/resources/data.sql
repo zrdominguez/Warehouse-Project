@@ -17,10 +17,10 @@ insert into WAREHOUSES (id, user_id, name, warehouse_type, capacity, location, c
 
 -- SECTIONS sample data
 insert into SECTIONS (id, warehouse_id, name, created_at, updated_at) values (1, 1, 'STRING', '5/24/2018', '9/19/2019');
-insert into SECTIONS (id, warehouse_id, name, created_at, updated_at) values (2, 2, 'BRASS', '7/15/2017', '12/6/2019');
-insert into SECTIONS (id, warehouse_id, name, created_at, updated_at) values (3, 3, 'PERCUSSION', '8/10/2022', '3/25/2015');
-insert into SECTIONS (id, warehouse_id, name, created_at, updated_at) values (4, 4, 'OTHER', '9/16/2016', '4/1/2020');
-insert into SECTIONS (id, warehouse_id, name, created_at, updated_at) values (5, 5, 'STRING', '9/1/2023', '2/9/2019');
+insert into SECTIONS (id, warehouse_id, name, created_at, updated_at) values (2, 1, 'BRASS', '7/15/2017', '12/6/2019');
+insert into SECTIONS (id, warehouse_id, name, created_at, updated_at) values (3, 1, 'PERCUSSION', '8/10/2022', '3/25/2015');
+insert into SECTIONS (id, warehouse_id, name, created_at, updated_at) values (4, 2, 'OTHER', '9/16/2016', '4/1/2020');
+insert into SECTIONS (id, warehouse_id, name, created_at, updated_at) values (5, 2, 'STRING', '9/1/2023', '2/9/2019');
 
 -- SECTIONS_PRODUCTS sample data
 insert into SECTIONS_PRODUCTS (section_id, product_id, quantity, created_at) values (1, 1, 770, '11/18/2017');
