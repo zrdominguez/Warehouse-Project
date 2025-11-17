@@ -13,8 +13,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.skillstorm.project1.backend.dto.CreateWarehouseRequest;
-import com.skillstorm.project1.backend.dto.UpdateWarehouseRequest;
+import com.skillstorm.project1.backend.dto.Product.ProductWithQuantity;
+import com.skillstorm.project1.backend.dto.Warehouse.CreateWarehouseRequest;
+import com.skillstorm.project1.backend.dto.Warehouse.UpdateWarehouseRequest;
 import com.skillstorm.project1.backend.models.Warehouse;
 import com.skillstorm.project1.backend.services.WarehouseService;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -44,7 +45,7 @@ public class WarehouseController {
     }
 
     //Find all warehouses owned by a user
-    @GetMapping("user/{userId}")
+    @GetMapping("/user/{userId}")
     public ResponseEntity<List<Warehouse>> findAllUserWarehouses(@PathVariable int userId){
         try{
             List<Warehouse> warehouses = warehouseService.findWarehousesByOwner(userId);
@@ -66,6 +67,13 @@ public class WarehouseController {
         }catch (Exception e){
             return ResponseEntity.internalServerError().header("message", "Something went wrong!").build();
         }
+    }
+
+    //Find All Products in a warehouse
+     @GetMapping("/{warehouseId}/products")
+    public ResponseEntity<List<ProductWithQuantity>> getProductsInWarehouse(@PathVariable int warehouseId) {
+        List<ProductWithQuantity> products = warehouseService.getProductsInWarehouse(warehouseId);
+        return new ResponseEntity<>(products, HttpStatus.OK);
     }
 
     //create a new warehouse

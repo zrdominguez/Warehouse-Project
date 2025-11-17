@@ -6,10 +6,13 @@ import java.util.Optional;
 import org.springframework.security.access.AccessDeniedException;
 
 import org.springframework.stereotype.Service;
-import com.skillstorm.project1.backend.dto.CreateWarehouseRequest;
-import com.skillstorm.project1.backend.dto.UpdateWarehouseRequest;
+
+import com.skillstorm.project1.backend.dto.Product.ProductWithQuantity;
+import com.skillstorm.project1.backend.dto.Warehouse.CreateWarehouseRequest;
+import com.skillstorm.project1.backend.dto.Warehouse.UpdateWarehouseRequest;
 import com.skillstorm.project1.backend.models.User;
 import com.skillstorm.project1.backend.models.Warehouse;
+import com.skillstorm.project1.backend.repositories.SectionProductRepository;
 import com.skillstorm.project1.backend.repositories.UserRepository;
 import com.skillstorm.project1.backend.repositories.WarehouseRepository;
 
@@ -19,10 +22,12 @@ import jakarta.transaction.Transactional;
 public class WarehouseService {
     private final WarehouseRepository warehouseRepository;
     private final UserRepository userRepository;
+    private final SectionProductRepository sectionProductRepository;
 
-    public WarehouseService(WarehouseRepository warehouseRepository, UserRepository userRepository){
+    public WarehouseService(WarehouseRepository warehouseRepository, UserRepository userRepository, SectionProductRepository sectionProductRepository){
         this.warehouseRepository = warehouseRepository;
         this.userRepository = userRepository;
+        this.sectionProductRepository = sectionProductRepository;
     }
 
     public List<Warehouse> findAllWarehouses(){
@@ -41,6 +46,10 @@ public class WarehouseService {
         return warehouse.get();
     }
 
+    public List<ProductWithQuantity> getProductsInWarehouse(Integer warehouseId) {
+        return sectionProductRepository.findProductsbyWarehouse(warehouseId);
+    }
+
     public Warehouse createWarehouse(CreateWarehouseRequest request) throws IllegalArgumentException{
         Optional<User> user = userRepository.findById(request.userId());
         
@@ -56,7 +65,7 @@ public class WarehouseService {
         return warehouseRepository.save(warehouse);
     }
 
-    public Warehouse updateWarehouse(Integer warehouseId, UpdateWarehouseRequest request){
+    public Warehouse updateWarehouse(Integer warehouseId, UpdateWarehouseRequest request) throws IllegalAccessException, AccessDeniedException{
         Optional<Warehouse> warehouseOptional = warehouseRepository.findById(warehouseId);
 
         if(warehouseOptional.isEmpty()) throw new IllegalArgumentException("Warehouse does not exist!");
