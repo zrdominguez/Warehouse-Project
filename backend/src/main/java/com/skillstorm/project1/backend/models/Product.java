@@ -117,6 +117,10 @@ public class Product {
         this.description = description;
     }
 
+    public void setSku(String sku){
+        this.sku = sku;
+    }
+
     @Override
     public int hashCode() {
         return getClass().hashCode();
