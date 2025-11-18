@@ -5,22 +5,20 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
+import com.skillstorm.project1.backend.dto.Product.CreateProductRequest;
 import com.skillstorm.project1.backend.dto.Product.UpdateProductRequest;
 // import com.skillstorm.project1.backend.dto.Product.ProductDto;
 import com.skillstorm.project1.backend.exception.NotFoundException;
 import com.skillstorm.project1.backend.models.Product;
-import com.skillstorm.project1.backend.models.Warehouse;
 import com.skillstorm.project1.backend.repositories.ProductRepository;
-import com.skillstorm.project1.backend.repositories.WarehouseRepository;
 
+import jakarta.transaction.Transactional;
 @Service
 public class ProductService {
     private final ProductRepository productRepository;
-    // private final WarehouseRepository warehouseRepository;
-    //, WarehouseRepository warehouseRepository
     
     private boolean isValidSku(String sku){
-        return sku != null && sku.matches("^PRD-\\d{6}$");
+        return sku != null && sku.matches("^PRD-[A-Z0-9]{6}$");
     }
 
     public ProductService(ProductRepository productRepository){
@@ -40,6 +38,20 @@ public class ProductService {
         return productRepository.findById(productId).get();
     }
 
+    public Product createProduct(CreateProductRequest dto)throws IllegalArgumentException{
+        
+        if(dto.description() == null && dto.description().isBlank()) throw new IllegalArgumentException("Product needs a description!");
+        Product product = new Product(
+            dto.name(),
+            dto.productType(),
+            dto.description()
+            );
+            
+            System.out.println(product);
+        return productRepository.save(product);
+    } 
+
+    @Transactional
     public Product updateProduct(Integer productId, UpdateProductRequest dto) throws IllegalArgumentException, NotFoundException{
         if(productId == null) throw new IllegalArgumentException("productId cannot be null!");
         Optional<Product> opProduct = productRepository.findById(productId);
@@ -52,5 +64,14 @@ public class ProductService {
         if(dto.sku() != null && !dto.sku().isBlank() && isValidSku(dto.sku())) product.setSku(dto.sku());
 
         return productRepository.save(product);
+    }
+
+    public void deleteProduct(Integer productId) throws IllegalArgumentException, NotFoundException{
+
+        if(productId == null) throw new IllegalArgumentException("productId cannot be null!");
+        Optional<Product> opProduct = productRepository.findById(productId);
+        if(opProduct.isEmpty()) throw new NotFoundException("No such product with id " + productId + " exists!");
+        
+        productRepository.deleteById(productId);
     }
 }

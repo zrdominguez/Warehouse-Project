@@ -66,7 +66,7 @@ public class Product {
     protected void onCreate() {
         this.createdAt = this.updatedAt = LocalDateTime.now();
         // Used PRD for Product - may change later to have the prefix for product type instead
-        this.sku = "PRD-" + UUID.randomUUID().toString().substring(0, 8).toUpperCase();
+        this.sku = "PRD-" + UUID.randomUUID().toString().substring(0, 6).toUpperCase();
     }
 
     //When Entity is updated, change updatedAt time

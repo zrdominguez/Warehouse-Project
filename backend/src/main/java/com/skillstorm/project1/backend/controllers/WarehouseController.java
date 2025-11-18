@@ -101,6 +101,7 @@ public class WarehouseController {
         }
     }
 
+    //Delete a warehouse
     @DeleteMapping("/{warehouseId}")
     public ResponseEntity<Void>  deleteWarehouse(@PathVariable int warehouseId, @RequestParam int userId){
         try{

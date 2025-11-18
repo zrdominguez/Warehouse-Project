@@ -70,11 +70,11 @@ public class WarehouseService {
 
         if(warehouseOptional.isEmpty()) throw new IllegalArgumentException("Warehouse does not exist!");
 
-        Optional<User> userOptional = userRepository.findById(request.userId());
+        Optional<User> opUser = userRepository.findById(request.userId());
         
-        if(userOptional.isEmpty()) throw new IllegalArgumentException("Must be a logged in User!");
+        if(opUser.isEmpty()) throw new IllegalArgumentException("Must be a logged in User!");
 
-        User user = userOptional.get();
+        User user = opUser.get();
         Warehouse warehouse = warehouseOptional.get();
 
         if(!user.equals(warehouse.getUser()) || !user.getIsAdmin()) throw new AccessDeniedException("Admin access Denied or User does not own Warehouse!");
@@ -93,19 +93,16 @@ public class WarehouseService {
     public void deleteWarehouse(Integer warehouseId, Integer userId){
 
         
-        Optional<Warehouse> warehouseOptional = warehouseRepository.findById(warehouseId);
+        Optional<Warehouse> opWarehouse = warehouseRepository.findById(warehouseId);
 
-        if(warehouseOptional.isEmpty()) throw new IllegalArgumentException("Warehouse does not exist!");
+        if(opWarehouse.isEmpty()) throw new IllegalArgumentException("Warehouse does not exist!");
 
-        Optional<User> userOptional = userRepository.findById(userId);
+        Optional<User> opUser = userRepository.findById(userId);
         
-        if(userOptional.isEmpty()) throw new IllegalArgumentException("Must be a logged in User!");
+        if(opUser.isEmpty()) throw new IllegalArgumentException("Must be a logged in User!");
 
-        User user = userOptional.get();
-        Warehouse warehouse = warehouseOptional.get();
-
-        System.out.println("ownerId = " + warehouse.getUser().getId());
-        System.out.println("incoming userId = " + userId);
+        User user = opUser.get();
+        Warehouse warehouse = opWarehouse.get();
 
         if(!user.equals(warehouse.getUser()) || !user.getIsAdmin()) throw new AccessDeniedException("Admin access Denied or User does not own Warehouse!");
 

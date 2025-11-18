@@ -31,3 +31,4 @@ insert into SECTIONS_PRODUCTS (section_id, product_id, quantity, created_at) val
 
 
 SELECT setval('warehouses_id_seq', (SELECT COALESCE(MAX(id), 0) FROM warehouses));
+SELECT setval('products_id_seq', (SELECT COALESCE(MAX(id), 0) FROM products));

@@ -10,6 +10,8 @@ import com.skillstorm.project1.backend.repositories.ProductRepository;
 import com.skillstorm.project1.backend.repositories.SectionProductRepository;
 import com.skillstorm.project1.backend.repositories.SectionRepository;
 
+import jakarta.transaction.Transactional;
+
 public class SectionProductService {
     
     private final SectionProductRepository sectionProductRepository;
@@ -23,6 +25,7 @@ public class SectionProductService {
         this.productRepository = productRepository;
     }
 
+    @Transactional
     public void updateQuantity(Integer sectionId, Integer productId, int newQuantity){
         Optional<SectionProduct> opSectionProduct = sectionProductRepository.findById(new SectionProductId(sectionId, productId));
         
@@ -33,6 +36,7 @@ public class SectionProductService {
         sectionProductRepository.save(sectionProduct);
     }
 
+    @Transactional
     public SectionProduct addProductToSection(Integer sectionId, Integer productId, int quantity) throws IllegalArgumentException{
         Optional<Section> section = sectionRepository.findById(sectionId);
         SectionProductId id = new SectionProductId(sectionId, productId);
@@ -50,5 +54,4 @@ public class SectionProductService {
 
         return sectionProductRepository.save(sectionProduct);
     }
-
 }

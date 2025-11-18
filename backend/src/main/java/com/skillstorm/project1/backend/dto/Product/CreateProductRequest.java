@@ -1,5 +1,9 @@
 package com.skillstorm.project1.backend.dto.Product;
 
-public class CreateProductRequest {
-    
-}
+import com.skillstorm.project1.backend.models.enums.ProductType;
+
+public record CreateProductRequest(
+    String name,
+    ProductType productType,
+    String description
+) {}
