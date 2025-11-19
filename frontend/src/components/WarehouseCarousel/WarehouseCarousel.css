@@ -1,0 +1,28 @@
+@import "tailwindcss";
+
+@keyframes warehouse-scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes warehouse-scroll-rev{
+  0% {
+    transform: translateX(-50%);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+.animate-warehouse-scroll {
+  animation: warehouse-scroll 30s linear infinite;
+}
+
+.animate-warehouse-scroll-rev {
+  animation: warehouse-scroll-rev 30s linear infinite;
+}
+
