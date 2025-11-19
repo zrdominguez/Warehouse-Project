@@ -1,21 +1,16 @@
-import React, { useEffect, useState } from 'react'
-import "./App.css"
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import MainLayout from "./layouts/MainLayout";
+import LandingPage from "./components/LandingPage/LandingPage";
+
 
 export default function App() {
-
-    const [message, setMessage] = useState('');
-    
-    useEffect(() => {
-        fetch('http://localhost:8080/api/hello')
-        .then(res => res.text())
-        .then(data => setMessage(data))
-    }, [])
-
-
   return (
-    <div className='flex flex-col justify-center items-center h-screen'>
-        <h1 className='font-bold text-blue-600'>Fullstack App</h1>
-        <p>{message}</p>
-    </div>
-  )
+     <BrowserRouter>
+      <Routes>
+        <Route element={<MainLayout />}>
+          <Route path="/" element={<LandingPage />} /> 
+        </Route>
+      </Routes>
+    </BrowserRouter>
+  );
 }
