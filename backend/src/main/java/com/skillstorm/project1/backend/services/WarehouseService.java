@@ -9,10 +9,13 @@ import org.springframework.stereotype.Service;
 
 import com.skillstorm.project1.backend.dto.Product.ProductWithQuantity;
 import com.skillstorm.project1.backend.dto.Warehouse.CreateWarehouseRequest;
+import com.skillstorm.project1.backend.dto.Warehouse.AddRequest;
 import com.skillstorm.project1.backend.dto.Warehouse.UpdateWarehouseRequest;
+import com.skillstorm.project1.backend.models.Section;
 import com.skillstorm.project1.backend.models.User;
 import com.skillstorm.project1.backend.models.Warehouse;
 import com.skillstorm.project1.backend.repositories.SectionProductRepository;
+import com.skillstorm.project1.backend.repositories.SectionRepository;
 import com.skillstorm.project1.backend.repositories.UserRepository;
 import com.skillstorm.project1.backend.repositories.WarehouseRepository;
 
@@ -23,11 +26,29 @@ public class WarehouseService {
     private final WarehouseRepository warehouseRepository;
     private final UserRepository userRepository;
     private final SectionProductRepository sectionProductRepository;
+    private final SectionRepository sectionRepository;
+    private final SectionProductService sectionProductService;
 
-    public WarehouseService(WarehouseRepository warehouseRepository, UserRepository userRepository, SectionProductRepository sectionProductRepository){
+    public WarehouseService(
+        WarehouseRepository warehouseRepository, 
+        UserRepository userRepository, 
+        SectionProductRepository sectionProductRepository,
+        SectionRepository sectionRepository,
+        SectionProductService sectionProductService
+        ){
         this.warehouseRepository = warehouseRepository;
         this.userRepository = userRepository;
         this.sectionProductRepository = sectionProductRepository;
+        this.sectionRepository = sectionRepository;
+        this.sectionProductService = sectionProductService;
+    }
+
+    private void checkCapacity(Warehouse warehouse, int load){
+        int newLoad = warehouse.getCurrentLoad() + load;
+
+        if(newLoad > warehouse.getCapacity()){
+            throw new IllegalArgumentException("Warehouse capacity exceeded");
+        }
     }
 
     public List<Warehouse> findAllWarehouses(){
@@ -83,7 +104,10 @@ public class WarehouseService {
         
         if(request.warehouseType() != null) warehouse.setWarehouseType(request.warehouseType());
 
-        if(request.capacity() != 0) warehouse.setCapacity(request.capacity());
+        if(request.capacity() != 0){
+            warehouse.setCapacity(request.capacity());
+            checkCapacity(warehouse, 0);
+        }
 
         if(request.location() != null) warehouse.setLocation(request.location());
 
@@ -92,7 +116,6 @@ public class WarehouseService {
 
     public void deleteWarehouse(Integer warehouseId, Integer userId){
 
-        
         Optional<Warehouse> opWarehouse = warehouseRepository.findById(warehouseId);
 
         if(opWarehouse.isEmpty()) throw new IllegalArgumentException("Warehouse does not exist!");
@@ -107,5 +130,33 @@ public class WarehouseService {
         if(!user.equals(warehouse.getUser()) || !user.getIsAdmin()) throw new AccessDeniedException("Admin access Denied or User does not own Warehouse!");
 
         warehouseRepository.deleteById(warehouseId);
+    }
+
+    public void transferProduct(Integer fromWarehouseId, Integer toWarehouseId, AddRequest dto){
+        Optional<Section> opFromSection = sectionProductRepository.findSectionByProductAndWarehouse(dto.productId(), fromWarehouseId);
+
+        Section fromSection = opFromSection.get();
+
+        Optional<Section> opToSection = sectionRepository.findByNameAndWarehouse(fromSection.getName(), toWarehouseId);
+        
+        Section toSection = opToSection.get();
+
+        System.out.println(fromSection + " " + toSection);
+
+        Warehouse toWarehouse = warehouseRepository.findById(toWarehouseId).get();
+
+        checkCapacity(toWarehouse, dto.quantity());
+
+        sectionProductService.transferProductToSection(fromSection, toSection, dto.productId(), dto.quantity());
+    }
+
+    public void addProductToWarehouse(Integer warehouseId, Integer sectionId, AddRequest dto){
+        Optional<Warehouse> opWarehouse = warehouseRepository.findById(warehouseId);
+
+        Warehouse warehouse = opWarehouse.get();
+
+        checkCapacity(warehouse, dto.quantity());
+
+        sectionProductService.addProductToSection(sectionId, dto.productId(), dto.quantity());
     }
 }

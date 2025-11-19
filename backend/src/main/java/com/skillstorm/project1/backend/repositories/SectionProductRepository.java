@@ -5,9 +5,11 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import com.skillstorm.project1.backend.dto.Product.ProductWithQuantity;
+import com.skillstorm.project1.backend.models.Section;
 import com.skillstorm.project1.backend.models.SectionProduct;
 import com.skillstorm.project1.backend.models.SectionProduct.SectionProductId;
 import java.util.List;
+import java.util.Optional;
 
 
 public interface SectionProductRepository extends JpaRepository<SectionProduct, SectionProductId>{
@@ -28,4 +30,15 @@ public interface SectionProductRepository extends JpaRepository<SectionProduct, 
     WHERE s.warehouse.id = :warehouseId
     """)
     List<ProductWithQuantity> findProductsbyWarehouse(@Param("warehouseId") Integer warehouseId);
+
+    @Query("""
+    SELECT sp.section
+    FROM SectionProduct sp
+    WHERE sp.product.id = :productId
+      AND sp.section.warehouse.id = :warehouseId
+    """)
+    Optional<Section> findSectionByProductAndWarehouse(
+        @Param("productId") Integer productId,
+        @Param("warehouseId") Integer warehouseId
+    );
 }

@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.skillstorm.project1.backend.dto.Product.ProductWithQuantity;
 import com.skillstorm.project1.backend.dto.Warehouse.CreateWarehouseRequest;
+import com.skillstorm.project1.backend.dto.Warehouse.AddRequest;
 import com.skillstorm.project1.backend.dto.Warehouse.UpdateWarehouseRequest;
 import com.skillstorm.project1.backend.models.Warehouse;
 import com.skillstorm.project1.backend.services.WarehouseService;
@@ -70,7 +71,7 @@ public class WarehouseController {
     }
 
     //Find All Products in a warehouse
-     @GetMapping("/{warehouseId}/products")
+    @GetMapping("/{warehouseId}/products")
     public ResponseEntity<List<ProductWithQuantity>> getProductsInWarehouse(@PathVariable int warehouseId) {
         List<ProductWithQuantity> products = warehouseService.getProductsInWarehouse(warehouseId);
         return new ResponseEntity<>(products, HttpStatus.OK);
@@ -82,6 +83,38 @@ public class WarehouseController {
         @RequestBody CreateWarehouseRequest request){
         try{
             return new ResponseEntity<>(warehouseService.createWarehouse(request), HttpStatus.CREATED);
+        }catch(IllegalArgumentException e){
+            return ResponseEntity.badRequest().header("message", e.getMessage()).build();
+        }catch (Exception e){
+            return ResponseEntity.internalServerError().header("message", "Something went wrong! " + e.getMessage()).build();
+        }
+    }
+
+    //Add product to warehouse
+    @PostMapping("/{warehouseId}/sections/{sectionId}/products")
+    public ResponseEntity<Void> addProductToWarehouse(
+        @PathVariable int warehouseId,
+        @PathVariable int sectionId, 
+        @RequestBody AddRequest dto){
+        try{
+            warehouseService.addProductToWarehouse(warehouseId, sectionId, dto);
+            return ResponseEntity.noContent().build();            
+        }catch(IllegalArgumentException e){
+            return ResponseEntity.badRequest().header("message", e.getMessage()).build();
+        }catch (Exception e){
+            return ResponseEntity.internalServerError().header("message", "Something went wrong! " + e.getMessage()).build();
+        }
+    }
+
+    //Transfer product from one warehouse to another
+    @PostMapping("/{fromWarehouseId}/transfer/{toWarehouseId}")
+    public ResponseEntity<Void> transferProduct(
+        @PathVariable int fromWarehouseId, 
+        @PathVariable int toWarehouseId,
+        @RequestBody AddRequest dto){
+        try{
+            warehouseService.transferProduct(fromWarehouseId, toWarehouseId, dto);
+            return ResponseEntity.noContent().build();            
         }catch(IllegalArgumentException e){
             return ResponseEntity.badRequest().header("message", e.getMessage()).build();
         }catch (Exception e){
@@ -103,7 +136,7 @@ public class WarehouseController {
 
     //Delete a warehouse
     @DeleteMapping("/{warehouseId}")
-    public ResponseEntity<Void>  deleteWarehouse(@PathVariable int warehouseId, @RequestParam int userId){
+    public ResponseEntity<Void>  deleteWarehouse(@PathVariable int warehouseId, @RequestBody int userId){
         try{
             warehouseService.deleteWarehouse(warehouseId, userId);
             return ResponseEntity.noContent().build();

@@ -1,9 +1,12 @@
 package com.skillstorm.project1.backend.models;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 import com.skillstorm.project1.backend.models.enums.WarehouseType;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -13,6 +16,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
@@ -43,11 +47,24 @@ public class Warehouse {
     @Column(nullable = false, length = 100)
     private String location;
 
+    @OneToMany(mappedBy = "warehouse", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Section> sections = new HashSet<>();
+
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
     
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;
+
+    public int getCurrentLoad(){
+        int sum = 0;
+        for(Section section : sections){
+            for (SectionProduct sectionProduct : section.getSectionProducts()){
+                sum += sectionProduct.getQuantity();
+            }
+        }
+        return sum;
+    }
 
     public Warehouse() {
     }

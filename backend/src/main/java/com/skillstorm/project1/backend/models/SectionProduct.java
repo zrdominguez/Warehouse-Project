@@ -13,6 +13,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.MapsId;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Min;
 
 @Entity
 @Table(name = "SECTIONS_PRODUCTS")
@@ -31,6 +32,7 @@ public class SectionProduct {
     @JoinColumn(name = "product_id")
     private Product product;
 
+    @Min(0)
     @Column(nullable = false)
     private int quantity = 0;
 

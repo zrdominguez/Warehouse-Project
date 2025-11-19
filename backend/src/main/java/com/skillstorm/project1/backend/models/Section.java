@@ -77,6 +77,10 @@ public class Section {
         return name;
     }
 
+    public Set<SectionProduct> getSectionProducts() {
+        return sectionProducts;
+    }
+
     public LocalDateTime getCreatedAt() {
         return createdAt;
     }
