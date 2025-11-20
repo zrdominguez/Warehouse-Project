@@ -15,13 +15,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.skillstorm.project1.backend.dto.Product.ProductWithQuantity;
 import com.skillstorm.project1.backend.dto.Warehouse.CreateWarehouseRequest;
+import com.skillstorm.project1.backend.dto.Warehouse.DeleteWarehouseRequest;
 import com.skillstorm.project1.backend.dto.Warehouse.AddRequest;
 import com.skillstorm.project1.backend.dto.Warehouse.UpdateWarehouseRequest;
 import com.skillstorm.project1.backend.models.Warehouse;
 import com.skillstorm.project1.backend.services.SectionProductService;
 import com.skillstorm.project1.backend.services.WarehouseService;
-
-import jakarta.transaction.Transactional;
 
 import org.springframework.web.bind.annotation.PutMapping;
 
@@ -157,9 +156,9 @@ public class WarehouseController {
 
     //Delete a warehouse
     @DeleteMapping("/{warehouseId}")
-    public ResponseEntity<Void>  deleteWarehouse(@PathVariable int warehouseId, @RequestBody int userId){
+    public ResponseEntity<Void>  deleteWarehouse(@PathVariable int warehouseId, @RequestBody DeleteWarehouseRequest dto){
         try{
-            warehouseService.deleteWarehouse(warehouseId, userId);
+            warehouseService.deleteWarehouse(warehouseId, dto);
             return ResponseEntity.noContent().build();
         }catch(IllegalArgumentException e){
             return ResponseEntity.badRequest().header("message", e.getMessage()).build();

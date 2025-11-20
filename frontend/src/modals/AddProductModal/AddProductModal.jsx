@@ -6,14 +6,14 @@ export default function AddProductModal({ open, onClose, onSubmit, products}) {
   const [productId, setProductId] = useState("");
  
 
-  const handleSubmit = (e) => {
+  const handleSubmit = e => {
     e.preventDefault();
     onSubmit({ quantity, productId });
     onClose();
   };
 
   return (
-    <Modal open={open} onClose={onClose} title="Create Product">
+    <Modal open={open} onClose={onClose} title="Add Product">
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
           <label className="block mb-1 font-medium">Product</label>
@@ -49,7 +49,7 @@ export default function AddProductModal({ open, onClose, onSubmit, products}) {
 
         <button
           type="submit"
-          className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700"
+          className="w-full bg-gray-600 text-white py-2 rounded-md hover:bg-gray-700"
         >
           Create
         </button>

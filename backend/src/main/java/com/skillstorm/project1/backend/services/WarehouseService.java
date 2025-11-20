@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.skillstorm.project1.backend.dto.Product.ProductWithQuantity;
 import com.skillstorm.project1.backend.dto.Warehouse.CreateWarehouseRequest;
+import com.skillstorm.project1.backend.dto.Warehouse.DeleteWarehouseRequest;
 import com.skillstorm.project1.backend.dto.Warehouse.AddRequest;
 import com.skillstorm.project1.backend.dto.Warehouse.UpdateWarehouseRequest;
 import com.skillstorm.project1.backend.models.Section;
@@ -115,13 +116,13 @@ public class WarehouseService {
         return warehouseRepository.save(warehouse);
     }
 
-    public void deleteWarehouse(Integer warehouseId, Integer userId){
+    public void deleteWarehouse(Integer warehouseId, DeleteWarehouseRequest dto){
 
         Optional<Warehouse> opWarehouse = warehouseRepository.findById(warehouseId);
 
         if(opWarehouse.isEmpty()) throw new IllegalArgumentException("Warehouse does not exist!");
 
-        Optional<User> opUser = userRepository.findById(userId);
+        Optional<User> opUser = userRepository.findById(dto.userId());
         
         if(opUser.isEmpty()) throw new IllegalArgumentException("Must be a logged in User!");
 

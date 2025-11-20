@@ -7,26 +7,26 @@ export default function WarehousePage() {
     const [warehouses, setWarehouses] = useState([]);
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(true);
-    
+
     const handleErrorClick = () => {
         window.location.reload();
     }
 
-    useEffect(() => {
-        const fetchData = async () => {
-            try{
-                const response = await fetch("http://localhost:8080/warehouse");
-                if(!response.ok) throw new Error(`There was an error! status: ${response.status}`)
-                const result = await response.json();
-                setWarehouses(result);
-            }catch(error){
-                setError(error);
-            }finally{
-                setLoading(false);
-            }
+    const loadWarehouses = async () => {
+        try{
+            const response = await fetch("http://localhost:8080/warehouse");
+            if(!response.ok) throw new Error(`There was an error! status: ${response.status}`)
+            const result = await response.json();
+            setWarehouses(result);
+        }catch(error){
+            setError(error);
+        }finally{
+            setLoading(false);
         }
+    }
 
-        fetchData();
+    useEffect(() => {
+        loadWarehouses();
     },[])
 
     if(loading) return <div className="text-center text-xl font-semibold loading-dots">Loading<span>.</span><span>.</span><span>.</span></div>
@@ -41,12 +41,9 @@ export default function WarehousePage() {
             </span>
         </div>
     );
-
-    console.log(warehouses);
-
   return (
     <div>
-      <WarehouseList warehouses={warehouses} />
+      <WarehouseList warehouses={warehouses} loadWarehouses={loadWarehouses} setError={setError}/>
     </div>
   )
 }

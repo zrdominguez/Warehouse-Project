@@ -1,16 +1,57 @@
 import { Card, CardContent, Typography, CardActions, Button } from "@mui/material";
 import "./WarehouseCard.css";
 import { useNavigate } from "react-router-dom";
+import ConfirmDeleteToast from "../../custom-toasts/ConfirmDeleteToast/ConfirmDeleteToast";
+import toast, { Toaster } from 'react-hot-toast';
 
-export default function WarehouseCard({warehouse}) {
-    const navigate = useNavigate();
+export default function WarehouseCard({warehouse, loadWarehouses, setError}) {
+  const navigate = useNavigate();
 
-    const handleView =  () => {
-        navigate(`/warehouse/${warehouse.id}`)
+  const handleView =  () => {
+    navigate(`/warehouse/${warehouse.id}`)
+  }
+
+  const onConfirm = async warehouseId => {
+    try{
+      const response = await fetch(
+        `http://localhost:8080/warehouse/${warehouseId}`,
+        {
+          method: 'DELETE',
+          headers:{
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({userId: 1})
+        }
+      );
+      if(!response.ok) throw new Error(`There was an error! status: ${response.status}`)
+      loadWarehouses();
+    }catch(error){
+      setError(error);
     }
+  }
+
+  const handleDelete = onConfirm => {
+    toast.custom(t => (
+      <ConfirmDeleteToast t={t} onConfirm={onConfirm} />
+    ))
+  }
+
+
   return (
-    <Card sx={{ minWidth: 250, marginRight: 2 }}>
+    <Card sx={{ minWidth: 250, marginRight: 2, position: "relative"}}>
+      <div><Toaster /></div>
       <CardContent>
+        <Button
+        size="small"
+        onClick={() => handleDelete( () => onConfirm(warehouse.id))}
+        sx={{
+          position: "absolute",
+          top: 8,
+          right: 8,
+          minWidth: "30px",
+          padding: "2px 6px",
+        }}
+        >X</Button>
         <Typography variant="h6" gutterBottom>
           {warehouse.name}
         </Typography>

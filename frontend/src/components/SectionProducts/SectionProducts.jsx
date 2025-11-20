@@ -120,7 +120,7 @@ export default function SectionProducts({section, loadWarehouse}) {
                 products={allProducts}
             />
             
-            <div className="mb-4 flex items-center justify-between">
+            <div className="mb-4 flex items-center justify-start gap-10">
                 <h2 className="text-xl font-semibold">
                     Products in {section.name}
                 </h2>

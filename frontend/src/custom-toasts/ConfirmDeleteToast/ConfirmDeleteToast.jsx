@@ -4,7 +4,7 @@ import toast from 'react-hot-toast';
 
 export default function ConfirmDeleteToast({t, onConfirm}) {
   return (
-    <div className="bg-gray-400 p-4 rounded-xl shadow-xl  border border-black font-bold">
+    <div className="bg-gray-400 p-4 rounded-xl shadow-xl text-white border border-black font-bold">
       <p>Are you sure you want to delete?</p>
 
       <div className="flex justify-center gap-2 mt-5">
