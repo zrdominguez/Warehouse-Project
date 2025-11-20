@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import MainLayout from "./layouts/MainLayout";
-import LandingPage from "./components/LandingPage/LandingPage";
+import LandingPage from "./pages/LandingPage/LandingPage";
+import WarehousePage from "./pages/WarehousePage";
 
 
 export default function App() {
@@ -9,6 +10,7 @@ export default function App() {
       <Routes>
         <Route element={<MainLayout />}>
           <Route path="/" element={<LandingPage />} /> 
+          <Route path="/warehouse" element={<WarehousePage />} /> 
         </Route>
       </Routes>
     </BrowserRouter>

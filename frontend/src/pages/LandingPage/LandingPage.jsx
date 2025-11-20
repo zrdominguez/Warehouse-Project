@@ -1,5 +1,5 @@
-import WarehouseCarousel from "../WarehouseCarousel";
-import WarehouseList from "../WarehouseList";
+import WarehouseCarousel from "../../components/WarehouseCarousel";
+import WarehouseList from "../../components/WarehouseList";
 import "./LandingPage.css";
 
 const sample = [

@@ -4,8 +4,8 @@ import "./TaskBar.css";
 export default function TaskBar() {
    const items = [
     { label: "Home", to: "/" },
-    { label: "Products", to: "/products" },
-    { label: "Warehouses", to: "/warehouses" },
+    { label: "Products", to: "/product" },
+    { label: "Warehouses", to: "/warehouse" },
     // { label: "About", to: "/about" },
   ];
 
