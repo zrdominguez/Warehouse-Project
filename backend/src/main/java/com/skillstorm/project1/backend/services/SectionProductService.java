@@ -29,7 +29,7 @@ public class SectionProductService {
     }
 
     @Transactional
-    public void updateQuantity(Integer sectionId, Integer productId, int newQuantity){
+    public void updateQuantity(Integer sectionId, Integer productId, Integer newQuantity){
         Optional<SectionProduct> opSectionProduct = sectionProductRepository.findById(new SectionProductId(sectionId, productId));
         
         SectionProduct sectionProduct = opSectionProduct.get();

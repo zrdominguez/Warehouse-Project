@@ -48,15 +48,15 @@ export default function WarehouseDetails() {
 
 
     return (
-    <div className="w-full max-w-5xl mx-auto py-10 px-4">
-      <div className="mb-8">
+    <div className="w-screen mx-auto py-10 px-4">
+      <div className="mb-8 max-w-5xl pl-100">
         <h1 className="text-3xl font-bold">{warehouse.name}</h1>
         <p className="text-gray-600">{warehouse.location}</p>
         <p className="text-gray-600">Capacity: {warehouse.current_load}/{warehouse.capacity}</p>
       </div>
 
       {/* ----- Tabs ----- */}
-      <div className="border-b border-gray-300">
+      <div className=" border-gray-300 w-xl justify-self-center">
         <nav className="flex space-x-4 justify-center">
           {warehouse?.sections.map((section, index) => (
             <button

@@ -7,7 +7,6 @@ export default function SectionProducts({section, loadWarehouse}) {
 
     const [openModal, setOpenModal] = useState(false);
     const [error, setError] = useState(null);
-    const [openAlert, setOpenAlert] = useState(false);
     const[allProducts, setAllProducts] = useState([]);
 
     useEffect(() => {
@@ -68,17 +67,59 @@ export default function SectionProducts({section, loadWarehouse}) {
         }
     }
 
+    const handleAddQuantity = async (product, sectionId) => {
+        try{
+            const response = await fetch(
+                `http://localhost:8080/section/${sectionId}/products/${product.id}`,
+                {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({quantity : product.quantity + 1})
+                }
+            );
+            if(!response.ok) throw new Error(`There was an error! status: ${response.status}`)
+            loadWarehouse();
+        }catch(error){
+            setError(error);
+        }
+    }
+    
+    const handleSubtractQuantity = async (product, sectionId) => {
+        try{
+            const response = await fetch(
+                `http://localhost:8080/section/${sectionId}/products/${product.id}`,
+                {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({quantity : product.quantity - 1})
+                }
+            );
+            if(!response.ok) throw new Error(`There was an error! status: ${response.status}`)
+            loadWarehouse();
+        }catch(error){
+            setError(error);
+        }
+    }
+
     if(error) return (<></>);
 
     return (
-        <div>
+        <div className="pl-100 pr-100">
+            {/* Toaster alert */}
             <div><Toaster /></div>
+            
+            {/* Add Modal */}
             <AddProductModal
                 open={openModal}
                 onClose={() => setOpenModal(false)}
                 onSubmit={handleOnSubmit}
                 products={allProducts}
             />
+            
             <div className="mb-4 flex items-center justify-between">
                 <h2 className="text-xl font-semibold">
                     Products in {section.name}
@@ -90,12 +131,11 @@ export default function SectionProducts({section, loadWarehouse}) {
                     +
                 </button>
             </div>
-      
-
+        
             {section.products.length === 0 ? (
                 <p className="text-gray-500">No products in this section.</p>
             ) : (
-                <div className="grid grid-cols-1 gap-4">
+                <div className="grid grid-cols-3 gap-4">
                     {section.products.map((product) => (
                         <div
                         key={product.id}
@@ -103,15 +143,29 @@ export default function SectionProducts({section, loadWarehouse}) {
                         >   
                             <button
                             onClick={() => handleDelete( () => onConfirm(section.id, product.id))}
-                            className="absolute top-3 right-3 text-gray-500 hover:text-gray-700"
+                            className="absolute top-3 right-3 text-gray-500 hover:text-gray-700 hover:cursor-pointer hover:scale-105"
                             >
                                 ✕
                             </button>
                             <h3 className="text-lg font-medium text-neutral-950">{product.name}</h3>
                             <p className="text-gray-600 text-sm">SKU: {product.sku}</p>
-                            <p className="text-gray-800 font-semibold">
-                                Qty: {product.quantity}
-                            </p>
+                            <div className="flex gap-2 items-center">
+                                <p className="text-gray-800 font-semibold">
+                                    Qty: {product.quantity}
+                                </p>
+                                <button 
+                                className="w-4 rounded-lg  border-2 bg-gray-400 border-gray-400 hover:bg-blue-500 transition"
+                                onClick={()=> handleAddQuantity(product, section.id)}
+                                >
+                                    +
+                                </button>
+                                <button 
+                                className="w-4 rounded-lg  border-2 bg-gray-400 border-gray-400 hover:bg-red-500 transition"
+                                onClick={()=> handleSubtractQuantity(product, section.id)}
+                                >
+                                    -
+                                </button>
+                            </div>
                         </div>
                     ))}
                 </div>

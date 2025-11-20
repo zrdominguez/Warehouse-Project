@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.skillstorm.project1.backend.dto.Product.UpdateQuantityRequest;
 import com.skillstorm.project1.backend.exception.NotFoundException;
 import com.skillstorm.project1.backend.models.Section;
 import com.skillstorm.project1.backend.services.SectionProductService;
@@ -44,9 +45,9 @@ public class SectionController {
     
     //Update quantity in section
     @PutMapping("/{sectionId}/products/{productId}")
-    public ResponseEntity<Void> updateQuantity(@PathVariable int sectionId, @PathVariable int productId, @RequestBody int quantity){
+    public ResponseEntity<Void> updateQuantity(@PathVariable int sectionId, @PathVariable int productId, @RequestBody UpdateQuantityRequest dto){
         try{
-            sectionProductService.updateQuantity(sectionId, productId, quantity);
+            sectionProductService.updateQuantity(sectionId, productId, dto.quantity());
             return ResponseEntity.noContent().build();
         }catch(NotFoundException e){
             return ResponseEntity.notFound().header("message", e.getMessage()).build();
