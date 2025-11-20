@@ -5,11 +5,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.skillstorm.project1.backend.exception.NotFoundException;
 import com.skillstorm.project1.backend.models.Section;
+import com.skillstorm.project1.backend.services.SectionProductService;
 import com.skillstorm.project1.backend.services.SectionService;
 
 @RestController
@@ -18,9 +21,11 @@ import com.skillstorm.project1.backend.services.SectionService;
 public class SectionController {
     
     SectionService sectionService;
+    SectionProductService sectionProductService;
     
-    public SectionController(SectionService sectionService){
+    public SectionController(SectionService sectionService, SectionProductService sectionProductService){
         this.sectionService = sectionService;
+        this.sectionProductService = sectionProductService;
     }
 
     //find section by id
@@ -36,5 +41,19 @@ public class SectionController {
             return ResponseEntity.internalServerError().header("message", "Something went wrong!").build();
         }
     }
-    //find sections in a warehouse
+    
+    //Update quantity in section
+    @PutMapping("/{sectionId}/products/{productId}")
+    public ResponseEntity<Void> updateQuantity(@PathVariable int sectionId, @PathVariable int productId, @RequestBody int quantity){
+        try{
+            sectionProductService.updateQuantity(sectionId, productId, quantity);
+            return ResponseEntity.noContent().build();
+        }catch(NotFoundException e){
+            return ResponseEntity.notFound().header("message", e.getMessage()).build();
+        }catch(IllegalArgumentException e){
+            return ResponseEntity.badRequest().header("message", e.getMessage()).build();
+        }catch (Exception e){
+            return ResponseEntity.internalServerError().header("message", "Something went wrong!").build();
+        }
+    }
 }

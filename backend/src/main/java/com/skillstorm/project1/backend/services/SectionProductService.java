@@ -66,7 +66,8 @@ public class SectionProductService {
         Section fromSection, 
         Section toSection, 
         Integer productId, 
-        int quantity){
+        int quantity
+    ){
         if (fromSection == null || productId == null || toSection == null)
         throw new IllegalArgumentException("Source section, productId or target section cannot be null!");
         
@@ -81,8 +82,22 @@ public class SectionProductService {
         int updatedQty = sectionProduct.getQuantity() - quantity;
 
         updateQuantity(fromSection.getId(), productId, updatedQty);
-        
-        
         addProductToSection(toSection.getId(), productId, quantity);
+    }
+
+    @Transactional
+    public void removeProductFromSection(
+        Integer sectionId,
+        Integer productId
+    ){
+        if (sectionId == null || productId == null)
+        throw new IllegalArgumentException("sectionId or productId cannot be null!");
+
+        SectionProductId id = new SectionProductId(sectionId, productId);
+
+        if(!sectionProductRepository.existsById(id))
+        throw new IllegalArgumentException("This product is not in this section!");
+
+        sectionProductRepository.deleteById(id);
     }
 }

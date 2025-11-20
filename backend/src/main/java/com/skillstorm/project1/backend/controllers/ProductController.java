@@ -55,8 +55,6 @@ public class ProductController {
             return ResponseEntity.internalServerError().header("message", "Something went wrong!").build();
         }
     }
-    
-    //Find a product by SKU
 
     //Create a new Product
     @PostMapping

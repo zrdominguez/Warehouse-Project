@@ -18,6 +18,7 @@ import com.skillstorm.project1.backend.dto.Warehouse.CreateWarehouseRequest;
 import com.skillstorm.project1.backend.dto.Warehouse.AddRequest;
 import com.skillstorm.project1.backend.dto.Warehouse.UpdateWarehouseRequest;
 import com.skillstorm.project1.backend.models.Warehouse;
+import com.skillstorm.project1.backend.services.SectionProductService;
 import com.skillstorm.project1.backend.services.WarehouseService;
 import org.springframework.web.bind.annotation.PutMapping;
 
@@ -27,10 +28,13 @@ import org.springframework.web.bind.annotation.PutMapping;
 @RequestMapping("/warehouse")
 public class WarehouseController {
 
+    private final SectionProductService sectionProductService;
+
     WarehouseService warehouseService;
 
-    public WarehouseController(WarehouseService warehouseService){
+    public WarehouseController(WarehouseService warehouseService, SectionProductService sectionProductService){
         this.warehouseService = warehouseService;
+        this.sectionProductService = sectionProductService;
     }
 
     //Show all warehouses
@@ -99,6 +103,19 @@ public class WarehouseController {
         @RequestBody AddRequest dto){
         try{
             warehouseService.addProductToWarehouse(warehouseId, sectionId, dto);
+            return ResponseEntity.noContent().build();            
+        }catch(IllegalArgumentException e){
+            return ResponseEntity.badRequest().header("message", e.getMessage()).build();
+        }catch (Exception e){
+            return ResponseEntity.internalServerError().header("message", "Something went wrong! " + e.getMessage()).build();
+        }
+    }
+
+    //Remove product from warehouse
+    @DeleteMapping("/sections/{sectionId}/product/{productId}")
+    public ResponseEntity<Void> removeFromWarehouse(@PathVariable int sectionId, @PathVariable int productId){
+        try{
+            sectionProductService.removeProductFromSection(sectionId, productId);
             return ResponseEntity.noContent().build();            
         }catch(IllegalArgumentException e){
             return ResponseEntity.badRequest().header("message", e.getMessage()).build();

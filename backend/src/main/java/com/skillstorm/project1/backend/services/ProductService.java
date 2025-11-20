@@ -66,6 +66,7 @@ public class ProductService {
         return productRepository.save(product);
     }
 
+    @Transactional
     public void deleteProduct(Integer productId) throws IllegalArgumentException, NotFoundException{
 
         if(productId == null) throw new IllegalArgumentException("productId cannot be null!");
