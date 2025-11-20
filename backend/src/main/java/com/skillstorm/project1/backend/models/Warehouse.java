@@ -142,6 +142,10 @@ public class Warehouse {
         this.location = location;
     }
 
+    public Set<Section> getSections() {
+        return sections;
+    }
+
     @Override
     public int hashCode() {
         return getClass().hashCode();

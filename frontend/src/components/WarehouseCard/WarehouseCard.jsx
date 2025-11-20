@@ -1,7 +1,13 @@
 import { Card, CardContent, Typography, CardActions, Button } from "@mui/material";
 import "./WarehouseCard.css";
+import { useNavigate } from "react-router-dom";
 
 export default function WarehouseCard({warehouse}) {
+    const navigate = useNavigate();
+
+    const handleView =  () => {
+        navigate(`/warehouse/${warehouse.id}`)
+    }
   return (
     <Card sx={{ minWidth: 250, marginRight: 2 }}>
       <CardContent>
@@ -16,7 +22,10 @@ export default function WarehouseCard({warehouse}) {
         </Typography>
       </CardContent>
       <CardActions>
-        <Button size="small">View</Button>
+        <Button 
+        size="small"
+        onClick={handleView}
+        >View</Button>
         <Button size="small">Edit</Button>
       </CardActions>
     </Card>

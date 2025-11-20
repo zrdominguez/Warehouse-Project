@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,6 +22,7 @@ import com.skillstorm.project1.backend.services.ProductService;
 
 @RestController
 @RequestMapping("/product")
+@CrossOrigin(origins = "http://localhost:5173")
 public class ProductController {
 
     ProductService productService;
@@ -43,7 +45,7 @@ public class ProductController {
     //Find a product by ID
     @GetMapping("/{productId}")
     public ResponseEntity<Product> findProductById(@PathVariable int productId){
-         try{
+        try{
             return new ResponseEntity<>(productService.findProductById(productId), HttpStatus.OK);
         }catch(NotFoundException e){
             return ResponseEntity.notFound().header("message", e.getMessage()).build();

@@ -2,10 +2,14 @@ package com.skillstorm.project1.backend.models;
 
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.skillstorm.project1.backend.dto.Product.ProductWithQuantity;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -45,7 +49,26 @@ public class Section {
     private LocalDateTime updatedAt;
 
     @OneToMany(mappedBy = "section", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
     private Set<SectionProduct> sectionProducts = new HashSet<>();
+
+    @JsonProperty("products")
+    public List<ProductWithQuantity> getProducts() {
+        List<ProductWithQuantity> list = new ArrayList<>();
+
+        for (SectionProduct sp : sectionProducts) {
+            Product product = sp.getProduct();
+            int quantity = sp.getQuantity();
+            list.add(new ProductWithQuantity(
+                product.getId(),
+                product.getName(),
+                product.getSku(),
+                product.getProductType(),
+                product.getDescription(), 
+                quantity));
+        }
+        return list;
+    }
     
     public Section() {
     }
