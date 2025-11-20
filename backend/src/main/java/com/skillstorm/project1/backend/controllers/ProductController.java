@@ -21,8 +21,8 @@ import com.skillstorm.project1.backend.models.Product;
 import com.skillstorm.project1.backend.services.ProductService;
 
 @RestController
-@RequestMapping("/product")
 @CrossOrigin(origins = "http://localhost:5173")
+@RequestMapping("/product")
 public class ProductController {
 
     ProductService productService;

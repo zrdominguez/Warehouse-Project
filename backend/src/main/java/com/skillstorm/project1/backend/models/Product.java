@@ -51,6 +51,8 @@ public class Product {
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     private Set<SectionProduct> sectionProducts = new HashSet<>();
+
+    
     
     public Product() {
     }

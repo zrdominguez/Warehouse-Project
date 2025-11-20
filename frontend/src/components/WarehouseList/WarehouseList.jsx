@@ -42,7 +42,7 @@ export default function WarehouseList({warehouses, loadWarehouses, setError}) {
                 <WarehouseCard key={warehouse.id} warehouse={warehouse} loadWarehouses={loadWarehouses} setError={setError}/>
                 ))}
                 <button
-                    className="flex flex-col items-center justify-center border-2 border-gray-400 w-[250px] h-40 rounded-xl p-6 hover:bg-orange-300 transition cursor-pointer"
+                    className="flex flex-col items-center justify-center border-2 border-gray-400 h-40 rounded-xl p-6 hover:bg-orange-300 transition cursor-pointer"
                     onClick={()=> setOpenModal(true)}
                 >
                     <span className="text-4xl font-bold">+</span>
