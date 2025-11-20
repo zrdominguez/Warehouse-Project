@@ -20,6 +20,9 @@ import com.skillstorm.project1.backend.dto.Warehouse.UpdateWarehouseRequest;
 import com.skillstorm.project1.backend.models.Warehouse;
 import com.skillstorm.project1.backend.services.SectionProductService;
 import com.skillstorm.project1.backend.services.WarehouseService;
+
+import jakarta.transaction.Transactional;
+
 import org.springframework.web.bind.annotation.PutMapping;
 
 

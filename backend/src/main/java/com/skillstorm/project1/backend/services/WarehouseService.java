@@ -61,6 +61,7 @@ public class WarehouseService {
         return warehouseRepository.findByUser(user.get());
     }
 
+    @Transactional
     public Warehouse findWarehouseById(Integer warehouseId) throws IllegalArgumentException{
         Optional<Warehouse> warehouse = warehouseRepository.findById(warehouseId);
         if(warehouse.isEmpty()) throw new IllegalArgumentException("Warehouse does not exist!");

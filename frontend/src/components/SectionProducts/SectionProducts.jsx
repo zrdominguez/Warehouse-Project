@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 import AddProductModal from "../../modals/AddProductModal";
+import toast, { Toaster } from 'react-hot-toast';
+import ConfirmDeleteToast from "../../custom-toasts/ConfirmDeleteToast/ConfirmDeleteToast";
 
 export default function SectionProducts({section, loadWarehouse}) {
 
     const [openModal, setOpenModal] = useState(false);
     const [error, setError] = useState(null);
-    const [loading, setLoading] = useState(true);
-
+    const [openAlert, setOpenAlert] = useState(false);
     const[allProducts, setAllProducts] = useState([]);
 
     useEffect(() => {
@@ -18,15 +19,12 @@ export default function SectionProducts({section, loadWarehouse}) {
                 setAllProducts(result);
             }catch(error){
                 setError(error);
-            }finally{
-                setLoading(false);
             }
         }
         fetchData();
     },[])
 
     const handleOnSubmit = async (product) => {
-        setLoading(true);
         try{
             const response = await fetch(
                 "http://localhost:8080/warehouse/1/sections/1/products",
@@ -43,16 +41,38 @@ export default function SectionProducts({section, loadWarehouse}) {
         }catch(error){
             setError(error);
         }finally{
-            setLoading(false);
             setOpenModal(false);
         }
     }
 
-    if(loading) return (<></>);
+    const handleDelete = onConfirm => {
+        toast.custom(t => (
+            <ConfirmDeleteToast t={t} onConfirm={onConfirm} />
+        ));
+    }
+
+    const onConfirm = async (sectionId, productId) => {
+        try{
+            const response = await fetch(
+                `http://localhost:8080/warehouse/sections/${sectionId}/product/${productId}`,
+                {
+                    method: 'DELETE',
+                }
+            );
+            if(!response.ok) throw new Error(`There was an error! status: ${response.status}`)
+            loadWarehouse();
+        }catch(error){
+            setError(error);
+        }finally{
+            setOpenModal(false);
+        }
+    }
+
     if(error) return (<></>);
 
     return (
         <div>
+            <div><Toaster /></div>
             <AddProductModal
                 open={openModal}
                 onClose={() => setOpenModal(false)}
@@ -79,8 +99,14 @@ export default function SectionProducts({section, loadWarehouse}) {
                     {section.products.map((product) => (
                         <div
                         key={product.id}
-                        className="border rounded-lg p-4 shadow-sm bg-white"
-                        >
+                        className="border rounded-lg p-4 shadow-sm bg-white relative"
+                        >   
+                            <button
+                            onClick={() => handleDelete( () => onConfirm(section.id, product.id))}
+                            className="absolute top-3 right-3 text-gray-500 hover:text-gray-700"
+                            >
+                                ✕
+                            </button>
                             <h3 className="text-lg font-medium text-neutral-950">{product.name}</h3>
                             <p className="text-gray-600 text-sm">SKU: {product.sku}</p>
                             <p className="text-gray-800 font-semibold">

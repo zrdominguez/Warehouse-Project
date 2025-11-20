@@ -49,11 +49,10 @@ export default function WarehouseDetails() {
 
     return (
     <div className="w-full max-w-5xl mx-auto py-10 px-4">
-
-      {/* ----- Warehouse Header ----- */}
       <div className="mb-8">
         <h1 className="text-3xl font-bold">{warehouse.name}</h1>
         <p className="text-gray-600">{warehouse.location}</p>
+        <p className="text-gray-600">Capacity: {warehouse.current_load}/{warehouse.capacity}</p>
       </div>
 
       {/* ----- Tabs ----- */}
@@ -66,8 +65,8 @@ export default function WarehouseDetails() {
               className={`pb-1 pt-1 px-4 text-sm font-medium flex-1 bg-amber-100 border rounded-lg  
                 ${
                   selectedTab === index
-                    ? "border-b-2 border-blue-500 text-blue-600"
-                    : "text-gray-600 hover:text-gray-800"
+                    ? "border-b-2 border-black texy-bold text-black"
+                    : "text-gray-600 hover:text-gray-800 hover:scale-105 hover:cursor-pointer" 
                 }
               `}
             >
@@ -76,8 +75,6 @@ export default function WarehouseDetails() {
           ))}
         </nav>
       </div>
-
-      {/* ----- Tab Content ----- */}
       <div className="mt-6">
         {warehouse?.sections[selectedTab] && (
           <SectionProducts section={warehouse?.sections[selectedTab]} loadWarehouse={loadWarehouse} />
