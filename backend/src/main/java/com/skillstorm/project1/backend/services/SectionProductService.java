@@ -36,7 +36,8 @@ public class SectionProductService {
 
         sectionProduct.setQuantity(newQuantity);
 
-        sectionProductRepository.save(sectionProduct);
+        if(sectionProduct.getQuantity() == 0) removeProductFromSection(sectionId, productId);
+        else sectionProductRepository.save(sectionProduct);
     }
 
     @Transactional
