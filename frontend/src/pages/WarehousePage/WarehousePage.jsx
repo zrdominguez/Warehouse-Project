@@ -17,6 +17,7 @@ export default function WarehousePage() {
             const response = await fetch("http://localhost:8080/warehouse");
             if(!response.ok) throw new Error(`There was an error! status: ${response.status}`)
             const result = await response.json();
+            if(result.length > 1) result.sort((a, b) => a.id - b.id)
             setWarehouses(result);
         }catch(error){
             setError(error);
