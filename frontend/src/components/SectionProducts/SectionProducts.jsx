@@ -2,11 +2,15 @@ import { useEffect, useState } from "react";
 import AddProductModal from "../../modals/AddProductModal";
 import toast, { Toaster } from 'react-hot-toast';
 import ConfirmDeleteToast from "../../custom-toasts/ConfirmDeleteToast/ConfirmDeleteToast";
+import { useParams } from "react-router-dom";
+import TransferProductModal from "../../modals/TransferProductModal/TransferProductModal";
 
 export default function SectionProducts({section, loadWarehouse}) {
-
-    const [openModal, setOpenModal] = useState(false);
-    const[allProducts, setAllProducts] = useState([]);
+    const {warehouseId} = useParams();
+    const [openAddModal, setOpenAddModal] = useState(false);
+    const [transferModal, setTransferModal] = useState(false);
+    const [allProducts, setAllProducts] = useState([]);
+    const [selectedProduct, setSelectedProduct] = useState({});
 
     useEffect(() => {
         const fetchData = async () => {
@@ -16,16 +20,16 @@ export default function SectionProducts({section, loadWarehouse}) {
                 const result = await response.json();
                 setAllProducts(result);
             }catch(error){
-                toast.error(`Error: ${err.message}`)
+                toast.error(`Error: ${error.message}`)
             }
         }
         fetchData();
     },[])
 
-    const handleOnSubmit = async (product) => {
+    const handleOnSubmit = async (product, warehouseId, sectionId) => {
         try{
             const response = await fetch(
-                "http://localhost:8080/warehouse/1/sections/1/products",
+                `http://localhost:8080/warehouse/${warehouseId}/sections/${sectionId}/products`,
                 {
                     method: 'POST',
                     headers: {
@@ -40,7 +44,7 @@ export default function SectionProducts({section, loadWarehouse}) {
         }catch(error){
             toast.error(`Error: ${error.message}`)
         }finally{
-            setOpenModal(false);
+            setOpenAddModal(false);
         }
     }
 
@@ -61,9 +65,9 @@ export default function SectionProducts({section, loadWarehouse}) {
             if(!response.ok) throw new Error(`There was an error! status: ${response.status}`)
             loadWarehouse();
         }catch(error){
-            toast.error(`Error: ${err.message}`)
+            toast.error(`Error: ${error.message}`)
         }finally{
-            setOpenModal(false);
+            setOpenAddModal(false);
         }
     }
 
@@ -82,7 +86,7 @@ export default function SectionProducts({section, loadWarehouse}) {
             if(!response.ok) throw new Error(`There was an error! status: ${response.status}`)
             loadWarehouse();
         }catch(error){
-            toast.error(`Error: ${err.message}`)
+            toast.error(`Error: ${error.message}`)
         }
     }
     
@@ -101,7 +105,26 @@ export default function SectionProducts({section, loadWarehouse}) {
             if(!response.ok) throw new Error(`There was an error! status: ${response.status}`)
             loadWarehouse();
         }catch(error){
-            toast.error(`Error: ${err.message}`)
+            toast.error(`Error: ${error.message}`)
+        }
+    }
+
+    const handleTransfer = async (sourceWarehouseId, targetWarehouseId, product) => {
+        try{
+            const response = await fetch(
+                `http://localhost:8080/warehouse/${sourceWarehouseId}/transfer/${targetWarehouseId}`,
+                {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(product)
+                }
+            );
+            if(!response.ok) throw new Error(`There was an error! status: ${response.status}`)
+            loadWarehouse();
+        }catch(error){
+            toast.error(`Error: ${error.message}`)
         }
     }
 
@@ -112,21 +135,26 @@ export default function SectionProducts({section, loadWarehouse}) {
             
             {/* Add Modal */}
             <AddProductModal
-                open={openModal}
-                onClose={() =>{
-                    setOpenModal(false)
-                }}
-                onSubmit={handleOnSubmit}
-                products={allProducts}
+            open={openAddModal}
+            onClose={() => setOpenAddModal(false)}
+            onSubmit={handleOnSubmit}
+            products={allProducts}
+            warehouseId={warehouseId}
+            sectionId={section.id}
             />
-            
+            <TransferProductModal
+            open={transferModal}
+            onClose={() => setTransferModal(false)}
+            onSubmit={handleTransfer}
+            productId={selectedProduct}
+            />
             <div className="mb-4 flex items-center justify-start gap-10">
                 <h2 className="text-xl font-semibold">
                     Products in {section.name == "GAME_CONSOLES" ? "GAME CONSOLES" : section.name}
                 </h2>
                 <button 
                 className="w-8 h-8 rounded-lg pb-0.5 border-2 bg-gray-400 border-gray-400 hover:bg-orange-300 transition"
-                onClick={() => setOpenModal(true)}
+                onClick={() => setOpenAddModal(true)}
                 >
                     +
                 </button>
@@ -166,6 +194,15 @@ export default function SectionProducts({section, loadWarehouse}) {
                                     -
                                 </button>
                             </div>
+                            <button
+                            className="mt-6 w-20 bg-gray-600 text-white py-2 rounded-md hover:bg-gray-700"
+                            onClick={() => {
+                                setTransferModal(true);
+                                setSelectedProduct(product.id)
+                            }}
+                            >
+                                Transfer
+                            </button>
                         </div>
                     ))}
                 </div>
