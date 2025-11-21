@@ -17,7 +17,7 @@ export default function TaskBar() {
         {items.map((item, index) => (
           <div key={item.to} className="flex items-center">
             <Link className="hover:scale-105" to={item.to}>
-              {item.label}
+              <h2 className='text-amber-900'>{item.label}</h2>
             </Link>
 
             {index < items.length - 1 && (
