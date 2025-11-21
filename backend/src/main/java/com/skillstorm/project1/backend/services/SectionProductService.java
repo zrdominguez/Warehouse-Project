@@ -47,6 +47,9 @@ public class SectionProductService {
         SectionProductId id = new SectionProductId(sectionId, productId);
         Optional<Product> product = productRepository.findById(productId);
         
+        if(!product.get().getProductType().name().equals(section.get().getName())) 
+        throw new IllegalArgumentException("cannot insert product of type: "+ product.get().getProductType() + " inside the " + section.get().getName() + " section!");
+        
         if(sectionProductRepository.existsById(id)){
             Optional<SectionProduct> opSectionProduct = sectionProductRepository.findById(id);
             SectionProduct sectionProduct = opSectionProduct.get();

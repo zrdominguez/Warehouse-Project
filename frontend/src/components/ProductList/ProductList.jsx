@@ -3,9 +3,9 @@ import "./ProductList.css"
 import ProductCard from "../ProductCard";
 import { useState } from "react";
 import CreateProductModal from "../../modals/CreateProductModal/CreateProductModal";
+import toast from "react-hot-toast";
 
 export default function ProductList({products, loadProducts}) {
-  const [error, setError] = useState(null);
   const [openModal, setOpenModal] = useState(false);
   
   const handleSubmit = async product =>{
@@ -23,7 +23,7 @@ export default function ProductList({products, loadProducts}) {
       if(!response.ok) throw new Error(`There was an error! status: ${response.status}`)
       loadProducts();
     }catch(error){
-      setError(error);
+      toast.error(`Error: ${err.message}`)
     }finally{
       setOpenModal(false);
     }

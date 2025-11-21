@@ -13,8 +13,6 @@ export default function EditProductModal({open, onClose, onSubmit, product}) {
     const [name, setName] = useState(product.name);
     const [description, setDescription] = useState(product.description);
     const [sku, setSku] = useState(product.sku);
-    const [skuError, setSkuError] = useState(null)
-    
 
     const handleSubmit = e => {
         e.preventDefault();

@@ -2,11 +2,11 @@ import CreateWarehouseModal from "../../modals/CreateWarehouseModal";
 import WarehouseCard from "../WarehouseCard";
 import "./WarehouseList.css";
 import { useState } from "react";
+import toast from "react-hot-toast";
 
 export default function WarehouseList({warehouses, loadWarehouses}) {
     
     const [openModal, setOpenModal] = useState(false);
-    const [error, setError] = useState(null);
     
     const handleSubmit = async warehouse => {
         try{
@@ -23,7 +23,7 @@ export default function WarehouseList({warehouses, loadWarehouses}) {
             if(!response.ok) throw new Error(`There was an error! status: ${response.status}`)
             loadWarehouses();
         }catch(error){
-            setError(error);
+            toast.error(`Error: ${err.message}`)
         }finally{
             setOpenModal(false);
         }

@@ -7,7 +7,7 @@ import EditProductModal from "../../modals/EditProductModal";
 export default function ProductCard({product, loadProducts}) {
 
   const [openModal, setOpenModal] = useState(false)
-  const [error, setError] = useState(null)
+  
   
   const handleDelete = onConfirm => {
     toast.custom(t => (
@@ -23,8 +23,8 @@ export default function ProductCard({product, loadProducts}) {
       );
       if (!response.ok) throw new Error("Failed to delete");
       loadProducts(); 
-    } catch (err) {
-      setError(err.message);
+    } catch (error) {
+      toast.error(`Error: ${error.message}`)
     }
   }
 
@@ -43,14 +43,11 @@ export default function ProductCard({product, loadProducts}) {
       if(!response.ok) throw new Error(`There was an error! status: ${response.status}`)
       loadProducts();
     }catch(error){
-      setError(error);
+      toast.error(`Error: ${err.message}`)
     }finally{
       setOpenModal(false);
     }
   } 
-
-  if(error) return <p>{error.message}</p>
-    
 
   return (
       <div

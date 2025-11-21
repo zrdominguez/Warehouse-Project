@@ -9,7 +9,6 @@ import EditWarehouseModal from "../../modals/EditWarehouseModal";
 export default function WarehouseCard({warehouse, loadWarehouses}) {
   const navigate = useNavigate();
   const [openModal, setOpenModal] = useState(false);
-  const [error, setError] = useState(null);
 
   const handleView =  () => {
     navigate(`/warehouse/${warehouse.id}`)
@@ -30,7 +29,7 @@ export default function WarehouseCard({warehouse, loadWarehouses}) {
       if(!response.ok) throw new Error(`There was an error! status: ${response.status}`)
       loadWarehouses();
     }catch(error){
-      setError(error);
+      toast.error(`Error: ${err.message}`)
     }
   }
 
@@ -55,7 +54,7 @@ export default function WarehouseCard({warehouse, loadWarehouses}) {
       if(!response.ok) throw new Error(`There was an error! status: ${response.status}`)
       loadWarehouses();
     }catch(error){
-      setError(error);
+      toast.error(`Error: ${err.message}`)
     }finally{
       setOpenModal(false);
     }

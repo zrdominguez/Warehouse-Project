@@ -6,7 +6,6 @@ import ConfirmDeleteToast from "../../custom-toasts/ConfirmDeleteToast/ConfirmDe
 export default function SectionProducts({section, loadWarehouse}) {
 
     const [openModal, setOpenModal] = useState(false);
-    const [error, setError] = useState(null);
     const[allProducts, setAllProducts] = useState([]);
 
     useEffect(() => {
@@ -17,7 +16,7 @@ export default function SectionProducts({section, loadWarehouse}) {
                 const result = await response.json();
                 setAllProducts(result);
             }catch(error){
-                setError(error);
+                toast.error(`Error: ${err.message}`)
             }
         }
         fetchData();
@@ -36,9 +35,10 @@ export default function SectionProducts({section, loadWarehouse}) {
                 }
             );
             if(!response.ok) throw new Error(`There was an error! status: ${response.status}`)
+            toast.success("Product Added!")
             loadWarehouse();
         }catch(error){
-            setError(error);
+            toast.error(`Error: ${error.message}`)
         }finally{
             setOpenModal(false);
         }
@@ -61,7 +61,7 @@ export default function SectionProducts({section, loadWarehouse}) {
             if(!response.ok) throw new Error(`There was an error! status: ${response.status}`)
             loadWarehouse();
         }catch(error){
-            setError(error);
+            toast.error(`Error: ${err.message}`)
         }finally{
             setOpenModal(false);
         }
@@ -82,7 +82,7 @@ export default function SectionProducts({section, loadWarehouse}) {
             if(!response.ok) throw new Error(`There was an error! status: ${response.status}`)
             loadWarehouse();
         }catch(error){
-            setError(error);
+            toast.error(`Error: ${err.message}`)
         }
     }
     
@@ -101,11 +101,9 @@ export default function SectionProducts({section, loadWarehouse}) {
             if(!response.ok) throw new Error(`There was an error! status: ${response.status}`)
             loadWarehouse();
         }catch(error){
-            setError(error);
+            toast.error(`Error: ${err.message}`)
         }
     }
-
-    if(error) return (<></>);
 
     return (
         <div className="pl-100 pr-100">
