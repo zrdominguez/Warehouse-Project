@@ -1,159 +1,139 @@
-📦 Inventory Management System
+
+# 📦 Inventory Management System
 
 A full-stack inventory management solution that allows administrators to manage warehouses, sections, products, and stored quantities across multiple locations.
 The system ensures accurate tracking, prevents over-capacity errors, and provides clean REST APIs for external consumption.
 
-🚀 Features
-Warehouse Management
+##  🚀 Features
 
-Create new warehouses with name, location, and max capacity.
+### Warehouse Management
+- Create new warehouses with name, location, and max capacity.
 
-View all warehouses with real-time current load calculation.
+- View all warehouses with real-time current load calculation.
 
-Update warehouse details (capacity, location, name, etc.).
+- Update warehouse details (capacity, location, name, etc.).
 
-Delete warehouses safely (with validation).
+- Delete warehouses safely (with validation).
 
-Automatic prevention of over-capacity stocking.
+- Automatic prevention of over-capacity stocking.
 
-Section Management
+### Product Management
+- Create, view, update, and delete product records.
 
-Each warehouse contains multiple sections.
+- Automatic SKU generation (e.g., "PRD-ABC1234").
 
-Sections contain products with quantities.
+- Used across warehouse sections for inventory tracking.
 
-Update quantities safely via PUT /section/{sectionId}/products/{productId}.
+### Section Management
+- Create new warehouses with name, location, and max capacity.
 
-Full validation for capacity, product existence, and section rules.
+- View all warehouses with real-time current load calculation.
 
-Product Management
+- Update warehouse details (capacity, location, name, etc.).
 
-Create, view, update, and delete product records.
+- Delete warehouses safely (with validation).
 
-Automatic SKU generation (e.g., "PRD-ABC1234").
+- Automatic prevention of over-capacity stocking.
 
-Used across warehouse sections for inventory tracking.
+## 🧱 Tech Stack
 
-🧱 Tech Stack
-Backend
+### Backend
+- Java 17+
 
-Java 17+
+- Spring Boot
 
-Spring Boot
+- Spring Web
 
-Spring Web
+- Spring Data JPA
 
-Spring Data JPA
+- Hibernate
 
-Hibernate
+- MySQL / PostgreSQL (any relational DB)
 
-MySQL / PostgreSQL (any relational DB)
+- Lombok (optional)
 
-Lombok (optional)
+### Frontend
+- React + Vite
 
-Frontend
+- Material UI (MUI)
 
-React + Vite
+- Custom navigation + taskbar implemented.
 
-Material UI (MUI)
-
-Custom navigation + taskbar implemented.
-
-🗂️ Project Architecture
-src/
- ├── controller/
- ├── service/
- ├── repository/
- ├── model/
+## 🗂️Project Architecture
+```src/
+ ├── controllers/
+ ├── services/
+ ├── repositories/
+ ├── models/
+ │     ├── enums
  │     ├── Warehouse
  │     ├── Section
  │     ├── Product
  │     └── SectionProduct (junction)
  ├── dto/
  └── exception/
+```
 
-Relationships
+### Relationships
+- Warehouse → Sections (1-to-many)
+- Section → SectionProducts (1-to-many)
+- Product → SectionProducts (1-to-many)
+- SectionProduct holds: section, product, quantity.
 
-Warehouse → Sections (1-to-many)
+## 📸 ERD (Entity Relationship Diagram)
+![ERD DIAGRAM](./docs/Warehouse-ERD.png)
 
-Section → SectionProducts (1-to-many)
+## 📡 REST API Overview
+### ✔ User Controller
+**Simple lookup for admin/user records
+GET /user/{id} → returns user info**
 
-Product → SectionProducts (1-to-many)
+### ✔ Warehouse Controller
+- GET /warehouse – list all warehouses
 
-SectionProduct holds: section, product, quantity.
+- GET /warehouse/{id} – get single warehouse
 
-📸 ERD (Entity Relationship Diagram)
+- POST /warehouse – create
 
-(Insert your ERD image here — recommended to drop it in a /docs folder and reference it)
+- PUT /warehouse/{id} – update
 
-Example:
+- DELETE /warehouse/{id} – delete
 
-![ERD Diagram](./docs/erd.png)
+### ✔ Section Controller
+- GET /section/{id} – view section
 
-📡 REST API Overview
-✔ User Controller
+- PUT /section/{sectionId}/products/{productId} – update quantity
 
-Simple lookup for admin/user records
-GET /user/{id} → returns user info
+### ✔ Product Controller
+- GET /product – list all products
 
-✔ Warehouse Controller
+- GET /product/{id} – find by ID
 
-GET /warehouse – list all warehouses
+- POST /product – create product
 
-GET /warehouse/{id} – get single warehouse
+- PUT /product/{id} – update
 
-POST /warehouse – create
+- DELETE /product/{id} – delete
 
-PUT /warehouse/{id} – update
+## ⚠️ Error Handling & Validation
+**Warehouse Capacity Overflow**\
+Attempting to add inventory beyond the warehouse’s **`maxCapacity`** will:
+- Throw a custom exception
+- Be returned as 400 Bad Request with a message header
 
-DELETE /warehouse/{id} – delete
-
-✔ Section Controller
-
-GET /section/{id} – view section
-
-PUT /section/{sectionId}/products/{productId} – update quantity
-
-✔ Product Controller
-
-GET /product – list all products
-
-GET /product/{id} – find by ID
-
-POST /product – create product
-
-PUT /product/{id} – update
-
-DELETE /product/{id} – delete
-
-⚠️ Error Handling & Validation
-Warehouse Capacity Overflow
-
-Attempting to add inventory beyond the warehouse’s maxCapacity will:
-
-Throw a custom exception
-
-Be returned as 400 Bad Request with a message header
-
-Duplicate Products in Section
-
+**Duplicate Products in Section**\
 Adding the same product twice updates quantity instead of duplicating data.
 
-General Exception Mapping
-
+**General Exception Mapping**\
 Controllers follow this structure:
+- 400 for validation errors
+- 404 for missing resources
+- 500 for unexpected failures
 
-400 for validation errors
-
-404 for missing resources
-
-500 for unexpected failures
-
-🧠 Business Logic Highlights
-Current Warehouse Load
-
+## 🧠 Business Logic Highlights
+**Current Warehouse Load** \
 Calculated dynamically — not stored:
-
+```
 @JsonProperty("current_load")
 public int getCurrentLoad() {
     int sum = 0;
@@ -164,55 +144,51 @@ public int getCurrentLoad() {
     }
     return sum;
 }
-
-Prevents Over-Stocking
-
+```
+**Prevents Over-Stocking** \
 Before updating a quantity:
+- Calculate total load
+- Verify it does not exceed warehouse capacity
+- Reject the update if necessary
 
-Calculate total load
+**SKU Auto-Generation Example** \
+SKUs follow a **`"PRD-XXXXXXX"`** pattern using UUID substring.
 
-Verify it does not exceed warehouse capacity
-
-Reject the update if necessary
-
-SKU Auto-Generation Example
-
-SKUs follow a "PRD-XXXXXXX" pattern using UUID substring.
-
-🖥️ Frontend Overview
-
+### 🖥️ Frontend Overview
 Features implemented:
+- Global taskbar with React + MUI
 
-Global taskbar with React + MUI
+- Warehouse cards with horizontal scrolling animation
 
-Warehouse cards with horizontal scrolling animation
+- Search & filter for products
 
-Search & filter for products
+- Responsive layout
 
-Responsive layout
+- Dynamic dashboard showing capacity usage
 
-Dynamic dashboard showing capacity usage
+### ▶️ How to Run
+**Backend**
+```
+bash
 
-▶️ How to Run
-Backend
 mvn spring-boot:run
+```
 
+**Make sure your database is configured in application.properties.
 
-Make sure your database is configured in application.properties.
+**Frontend**
+```
+bash
 
-Frontend
 cd client
 npm install
 npm run dev
+```
+### 📌 Future Improvements
+- Better role-based authentication
 
-📌 Future Improvements
+- Activity logging (audit trails)
 
-Transfer inventory between warehouses
+- Low/incoming stock alerts
 
-Better role-based authentication
-
-Activity logging (audit trails)
-
-Low/incoming stock alerts
-
-Soft-deletion support
+- Soft-deletion support
