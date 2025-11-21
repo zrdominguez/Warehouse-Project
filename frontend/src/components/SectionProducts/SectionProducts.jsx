@@ -113,14 +113,16 @@ export default function SectionProducts({section, loadWarehouse}) {
             {/* Add Modal */}
             <AddProductModal
                 open={openModal}
-                onClose={() => setOpenModal(false)}
+                onClose={() =>{
+                    setOpenModal(false)
+                }}
                 onSubmit={handleOnSubmit}
                 products={allProducts}
             />
             
             <div className="mb-4 flex items-center justify-start gap-10">
                 <h2 className="text-xl font-semibold">
-                    Products in {section.name}
+                    Products in {section.name == "GAME_CONSOLES" ? "GAME CONSOLES" : section.name}
                 </h2>
                 <button 
                 className="w-8 h-8 rounded-lg pb-0.5 border-2 bg-gray-400 border-gray-400 hover:bg-orange-300 transition"

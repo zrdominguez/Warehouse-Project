@@ -82,7 +82,10 @@ export default function WarehouseCard({warehouse, loadWarehouses}) {
           padding: "2px 6px",
         }}
         >X</Button>
-        <Typography variant="h6" gutterBottom>
+        <Typography 
+        variant="h6" 
+        gutterBottom
+        >
           {warehouse.name}
         </Typography>
         <Typography 

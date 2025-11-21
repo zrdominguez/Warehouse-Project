@@ -6,12 +6,20 @@ const WAREHOUSETYPES = ["INSTRUMENTS", "BOOKS","ELECTRONICS"];
 export default function CreateWarehouseModal({open, onClose, onSubmit}) {
     const [name, setName] = useState("Untitled");
     const [warehouseType, setWarehouseType] = useState("");
-    const [capacity, setCapacity] = useState(null);
+    const [capacity, setCapacity] = useState(0);
     const [location, setLocation] = useState("");
+
+    const reset = () => {
+        setName("Untitled");
+        setWarehouseType("");
+        setCapacity(0);
+        setLocation("");
+    }
 
     const handleSubmit = e => {
         e.preventDefault();
         onSubmit({userId : 1, name, warehouseType, capacity, location});
+        reset();
         onClose();
     }
     return (

@@ -21,9 +21,16 @@ export default function CreateProductModal({open, onClose, onSubmit}) {
     const [productType, setProductType] = useState("");
     const [description, setDescription] = useState("")
     
+    const reset = () => {
+        setName("");
+        setProductType("");
+        setDescription("");
+    }
+
     const handleSubmit = e => {
         e.preventDefault();
         onSubmit({name, productType, description});
+        reset();
         onClose();
     }
 

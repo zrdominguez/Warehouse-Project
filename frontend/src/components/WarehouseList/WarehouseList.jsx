@@ -22,6 +22,7 @@ export default function WarehouseList({warehouses, loadWarehouses}) {
             );
             if(!response.ok) throw new Error(`There was an error! status: ${response.status}`)
             loadWarehouses();
+            toast.success("Warehouse Created!")
         }catch(error){
             toast.error(`Error: ${err.message}`)
         }finally{
@@ -40,7 +41,7 @@ export default function WarehouseList({warehouses, loadWarehouses}) {
 
             <div className="grid grid-cols-6 gap-4">
                 <button
-                    className="flex flex-col items-center justify-center border-2 border-gray-400 h-40 rounded-xl p-6 hover:bg-orange-300 transition cursor-pointer"
+                    className="flex flex-col items-center justify-center border-2 border-gray-400 rounded-xl p-6 hover:bg-orange-300 transition cursor-pointer"
                     onClick={()=> setOpenModal(true)}
                 >
                     <span className="text-4xl font-bold">+</span>

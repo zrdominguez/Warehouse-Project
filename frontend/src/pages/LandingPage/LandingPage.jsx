@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import WarehouseCarousel from "../../components/WarehouseCarousel";
 import "./LandingPage.css";
+import toast from "react-hot-toast";
 
 export default function LandingPage() {
   const [warehouses, setWarehouses] = useState([]);
@@ -14,7 +15,7 @@ export default function LandingPage() {
       if(result.length > 1) result.sort((a, b) => a.id - b.id)
       setWarehouses(result);
     }catch(error){
-      toast.error(`Error: ${err.message}`)
+      toast.error(`Error: ${error.message}`)
     }finally{
       setLoading(false);
     }

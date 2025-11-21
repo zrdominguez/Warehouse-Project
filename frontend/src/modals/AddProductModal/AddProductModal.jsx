@@ -5,10 +5,15 @@ export default function AddProductModal({ open, onClose, onSubmit, products}) {
   const [quantity, setQuantity] = useState(1);
   const [productId, setProductId] = useState("");
  
+  const reset = () =>{
+    setQuantity(1);
+    setProductId("")
+  }
 
   const handleSubmit = e => {
     e.preventDefault();
     onSubmit({ quantity, productId });
+    reset();
     onClose();
   };
 
