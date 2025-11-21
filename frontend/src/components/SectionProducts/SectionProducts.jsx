@@ -85,7 +85,6 @@ export default function SectionProducts({section, loadWarehouse}) {
             );
             if(!response.ok) throw new Error(`There was an error! status: ${response.status}`)
             loadWarehouse();
-            toast.success("Product Transfer!")
         }catch(error){
             toast.error(`Error: ${error.message}`)
         }
