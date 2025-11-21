@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Modal from "../Modal";
 
-const WAREHOUSETYPES = ["INSTRUMENTS"];
+const WAREHOUSETYPES = ["INSTRUMENTS", "BOOKS","ELECTRONICS"];
 
 export default function CreateWarehouseModal({open, onClose, onSubmit}) {
     const [name, setName] = useState("Untitled");

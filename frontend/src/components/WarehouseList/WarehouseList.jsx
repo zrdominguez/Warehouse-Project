@@ -3,9 +3,10 @@ import WarehouseCard from "../WarehouseCard";
 import "./WarehouseList.css";
 import { useState } from "react";
 
-export default function WarehouseList({warehouses, loadWarehouses, setError}) {
+export default function WarehouseList({warehouses, loadWarehouses}) {
     
     const [openModal, setOpenModal] = useState(false);
+    const [error, setError] = useState(null);
     
     const handleSubmit = async warehouse => {
         try{
@@ -46,7 +47,7 @@ export default function WarehouseList({warehouses, loadWarehouses, setError}) {
                     <span className="mt-2">Add Warehouse</span>
                 </button>
                 {warehouses.map((warehouse) => (
-                <WarehouseCard key={warehouse.id} warehouse={warehouse} loadWarehouses={loadWarehouses} setError={setError}/>
+                <WarehouseCard key={warehouse.id} warehouse={warehouse} loadWarehouses={loadWarehouses}/>
                 ))}
             </div>
         </div>

@@ -6,9 +6,10 @@ import toast, { Toaster } from 'react-hot-toast';
 import { useState } from "react";
 import EditWarehouseModal from "../../modals/EditWarehouseModal";
 
-export default function WarehouseCard({warehouse, loadWarehouses, setError}) {
+export default function WarehouseCard({warehouse, loadWarehouses}) {
   const navigate = useNavigate();
   const [openModal, setOpenModal] = useState(false);
+  const [error, setError] = useState(null);
 
   const handleView =  () => {
     navigate(`/warehouse/${warehouse.id}`)
@@ -84,6 +85,16 @@ export default function WarehouseCard({warehouse, loadWarehouses, setError}) {
         >X</Button>
         <Typography variant="h6" gutterBottom>
           {warehouse.name}
+        </Typography>
+        <Typography 
+        variant="subtitle2"
+        sx={{ 
+        color: 'primary.main', 
+        fontWeight: 'bold',
+        letterSpacing: 0.5
+        }}
+        >
+          {warehouse.warehouseType}
         </Typography>
         <Typography variant="body2" color="text.secondary">
           Location: {warehouse.location}

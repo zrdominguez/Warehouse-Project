@@ -2,11 +2,18 @@ import { use, useState } from "react";
 import Modal from "../Modal";
 
 const PRODUCTTYPES = [
-    "OTHER",
     "STRING",
     "WOODWIND",
     "BRASS",
-    "PERCUSSION"
+    "PERCUSSION",
+    "DRAMA",
+    "ROMANCE",
+    "NONFICTION",
+    "HORROR",
+    "MYSTERY",
+    "LAPTOPS",
+    "SMARTPHONES",
+    "GAME_CONSOLES",
 ];
 
 export default function CreateProductModal({open, onClose, onSubmit}) {

@@ -116,6 +116,10 @@ public class Section {
         this.name = name;
     }
 
+    public void setWarehouse(Warehouse warehouse) {
+        this.warehouse = warehouse;
+    }
+
     @Override
     public int hashCode() {
         return getClass().hashCode();

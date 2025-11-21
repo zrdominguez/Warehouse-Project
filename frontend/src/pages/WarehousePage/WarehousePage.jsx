@@ -44,7 +44,7 @@ export default function WarehousePage() {
     );
   return (
     <div>
-      <WarehouseList warehouses={warehouses} loadWarehouses={loadWarehouses} setError={setError}/>
+      <WarehouseList warehouses={warehouses} loadWarehouses={loadWarehouses}/>
     </div>
   )
 }

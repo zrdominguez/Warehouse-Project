@@ -15,6 +15,8 @@ import com.skillstorm.project1.backend.dto.Warehouse.UpdateWarehouseRequest;
 import com.skillstorm.project1.backend.models.Section;
 import com.skillstorm.project1.backend.models.User;
 import com.skillstorm.project1.backend.models.Warehouse;
+import com.skillstorm.project1.backend.models.enums.ProductType;
+import com.skillstorm.project1.backend.models.enums.WarehouseDefaults;
 import com.skillstorm.project1.backend.repositories.SectionProductRepository;
 import com.skillstorm.project1.backend.repositories.SectionRepository;
 import com.skillstorm.project1.backend.repositories.UserRepository;
@@ -73,6 +75,7 @@ public class WarehouseService {
         return sectionProductRepository.findProductsbyWarehouse(warehouseId);
     }
 
+    @Transactional
     public Warehouse createWarehouse(CreateWarehouseRequest request) throws IllegalArgumentException{
         Optional<User> user = userRepository.findById(request.userId());
         
@@ -85,7 +88,18 @@ public class WarehouseService {
             request.capacity(), 
             request.location());
 
-        return warehouseRepository.save(warehouse);
+        Warehouse saved = warehouseRepository.save(warehouse);
+
+        List<ProductType> sectionTypes = WarehouseDefaults.getSectionTypesFor(saved.getWarehouseType());
+
+        for (ProductType type : sectionTypes){
+            Section section = new Section();
+            section.setName(type.name());
+            section.setWarehouse(saved);
+            sectionRepository.save(section);
+        }
+
+        return saved;
     }
 
     public Warehouse updateWarehouse(Integer warehouseId, UpdateWarehouseRequest request) throws IllegalAccessException, AccessDeniedException{

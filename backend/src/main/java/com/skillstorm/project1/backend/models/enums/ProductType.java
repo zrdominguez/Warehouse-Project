@@ -1,9 +1,16 @@
 package com.skillstorm.project1.backend.models.enums;
 
 public enum ProductType {
-    OTHER,
     STRING,
     WOODWIND,
     BRASS,
-    PERCUSSION
+    PERCUSSION,
+    DRAMA,
+    ROMANCE,
+    NONFICTION,
+    HORROR,
+    MYSTERY,
+    LAPTOPS,
+    SMARTPHONES,
+    GAME_CONSOLES,
 }
