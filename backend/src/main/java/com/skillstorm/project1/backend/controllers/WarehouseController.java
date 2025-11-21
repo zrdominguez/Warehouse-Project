@@ -24,7 +24,12 @@ import com.skillstorm.project1.backend.services.WarehouseService;
 
 import org.springframework.web.bind.annotation.PutMapping;
 
-
+/**
+ * REST controller for managing warehouses, warehouse sections, and
+ * the products stored within them.
+ *
+ * Base URL: /warehouse
+ */
 @RestController
 @CrossOrigin(origins = "http://localhost:5173")
 @RequestMapping("/warehouse")
@@ -39,7 +44,15 @@ public class WarehouseController {
         this.sectionProductService = sectionProductService;
     }
 
-    //Show all warehouses
+    /**
+    * Retrieves all warehouses in the system.
+    *
+    * <p>This endpoint returns every warehouse regardless of owner.
+    * It returns HTTP 200 on success, HTTP 400 if the request is invalid,
+    * and HTTP 500 if an unexpected error occurs.</p>
+    *
+    * @return ResponseEntity containing the list of warehouses and the appropriate HTTP status.
+    */
     @GetMapping
     public ResponseEntity<List<Warehouse>> findAllWarehouses(){
         try{
@@ -52,7 +65,16 @@ public class WarehouseController {
         }
     }
 
-    //Find all warehouses owned by a user
+    /**
+    * Retrieves all warehouses owned by a specific user.
+    *
+    * <p>The provided userId must match an existing user.  
+    * Returns HTTP 200 with the user's warehouses, HTTP 400 if the userId is invalid,
+    * and HTTP 500 for unexpected errors.</p>
+    *
+    * @param userId the ID of the user whose warehouses should be returned
+    * @return ResponseEntity containing the list of warehouses for the user and the appropriate HTTP status.
+    */
     @GetMapping("/user/{userId}")
     public ResponseEntity<List<Warehouse>> findAllUserWarehouses(@PathVariable int userId){
         try{
@@ -65,7 +87,16 @@ public class WarehouseController {
         }
     }
 
-    //Find warehouse by its id
+    /**
+    * Retrieves a warehouse by its ID.
+    *
+    * <p>Returns the warehouse if it exists.  
+    * Returns HTTP 200 on success, HTTP 400 if the ID is invalid,
+    * and HTTP 500 for unexpected internal errors.</p>
+    *
+    * @param warehouseId the unique ID of the warehouse
+    * @return ResponseEntity containing the warehouse and the appropriate HTTP status.
+    */
     @GetMapping("/{warehouseId}")
     public ResponseEntity<Warehouse> findWarehouseById(@PathVariable int warehouseId){
         try{
@@ -77,14 +108,26 @@ public class WarehouseController {
         }
     }
 
-    //Find All Products in a warehouse
+    /**
+    * Retrieves all products and their quantities inside a warehouse.
+    *
+    * @param warehouseId ID of the warehouse.
+    * @return 200 OK with list of product+quantity objects.
+    */
     @GetMapping("/{warehouseId}/products")
     public ResponseEntity<List<ProductWithQuantity>> getProductsInWarehouse(@PathVariable int warehouseId) {
         List<ProductWithQuantity> products = warehouseService.getProductsInWarehouse(warehouseId);
         return new ResponseEntity<>(products, HttpStatus.OK);
     }
 
-    //create a new warehouse
+    /**
+    * Creates a new warehouse owned by a user.
+    *
+    * @param request DTO containing name, warehouseType, capacity, location, and userId.
+    * @return 201 Created with the created warehouse,
+    *         400 Bad Request for validation errors,
+    *         500 Internal Server Error for unexpected issues.
+    */
     @PostMapping
     public ResponseEntity<Warehouse> createWarehouse(
         @RequestBody CreateWarehouseRequest request){
@@ -97,7 +140,16 @@ public class WarehouseController {
         }
     }
 
-    //Add product to warehouse
+    /**
+    * Adds a product to a specific warehouse section.
+    *
+    * @param warehouseId ID of the warehouse.
+    * @param sectionId ID of the section.
+    * @param dto DTO containing productId and quantity.
+    * @return 204 No Content on success,
+    *         400 Bad Request on invalid data,
+    *         500 Internal Server Error on unexpected issues.
+    */
     @PostMapping("/{warehouseId}/sections/{sectionId}/products")
     public ResponseEntity<Void> addProductToWarehouse(
         @PathVariable int warehouseId,
@@ -113,7 +165,15 @@ public class WarehouseController {
         }
     }
 
-    //Remove product from warehouse
+    /**
+    * Removes a product from a warehouse section.
+    *
+    * @param sectionId ID of the section.
+    * @param productId ID of the product.
+    * @return 204 No Content on success,
+    *         400 Bad Request for invalid IDs,
+    *         500 Internal Server Error for unexpected issues.
+    */
     @DeleteMapping("/sections/{sectionId}/product/{productId}")
     public ResponseEntity<Void> removeFromWarehouse(@PathVariable int sectionId, @PathVariable int productId){
         try{
@@ -126,7 +186,16 @@ public class WarehouseController {
         }
     }
 
-    //Transfer product from one warehouse to another
+    /**
+    * Transfers product quantity between two warehouses.
+    *
+    * @param fromWarehouseId Warehouse sending the product.
+    * @param toWarehouseId Warehouse receiving the product.
+    * @param dto DTO containing productId and quantity.
+    * @return 204 No Content on success,
+    *         400 Bad Request on invalid data,
+    *         500 Internal Server Error on unexpected issues.
+    */
     @PostMapping("/{fromWarehouseId}/transfer/{toWarehouseId}")
     public ResponseEntity<Void> transferProduct(
         @PathVariable int fromWarehouseId, 
@@ -142,7 +211,15 @@ public class WarehouseController {
         }
     }
 
-    //Update warehouse details
+    /**
+    * Updates warehouse details such as name, type, location, and capacity.
+    *
+    * @param warehouseId ID of the warehouse.
+    * @param request DTO containing updated warehouse fields.
+    * @return 200 OK with the updated warehouse,
+    *         400 Bad Request on validation issues,
+    *         500 Internal Server Error on unexpected issues.
+    */
     @PutMapping("/{warehouseId}")
     public ResponseEntity<Warehouse> updateWarehouse(@PathVariable int warehouseId, @RequestBody UpdateWarehouseRequest request) {
         try{
@@ -154,7 +231,15 @@ public class WarehouseController {
         }
     }
 
-    //Delete a warehouse
+    /**
+    * Deletes a warehouse if the user owns it.
+    *
+    * @param warehouseId ID of the warehouse.
+    * @param dto DTO containing userId for authentication.
+    * @return 204 No Content on success,
+    *         400 Bad Request for validation issues,
+    *         500 Internal Server Error on unexpected issues.
+    */
     @DeleteMapping("/{warehouseId}")
     public ResponseEntity<Void>  deleteWarehouse(@PathVariable int warehouseId, @RequestBody DeleteWarehouseRequest dto){
         try{

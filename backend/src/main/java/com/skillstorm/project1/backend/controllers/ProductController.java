@@ -20,6 +20,12 @@ import com.skillstorm.project1.backend.exception.NotFoundException;
 import com.skillstorm.project1.backend.models.Product;
 import com.skillstorm.project1.backend.services.ProductService;
 
+/**
+ * REST controller for managing products.
+ *
+ * <p>Provides endpoints for creating, updating, deleting, and retrieving products.
+ * All responses include standard HTTP status codes and error handling.</p>
+ */
 @RestController
 @CrossOrigin(origins = "http://localhost:5173")
 @RequestMapping("/product")
@@ -31,7 +37,12 @@ public class ProductController {
         this.productService = productService;
     }
 
-    //Get all products
+    /**
+     * Retrieves all products.
+     *
+     * @return HTTP 200 with a list of all products, or
+     *         HTTP 500 if an unexpected server error occurs.
+     */
     @GetMapping
     public ResponseEntity<List<Product>>  findAllProducts(){
         try {
@@ -42,7 +53,15 @@ public class ProductController {
         }
     }
 
-    //Find a product by ID
+    /**
+     * Retrieves a product by its ID.
+     *
+     * @param productId the ID of the product to retrieve.
+     * @return HTTP 200 with the product,
+     *         HTTP 404 if the product is not found,
+     *         HTTP 400 if the ID is invalid,
+     *         HTTP 500 for server errors.
+     */
     @GetMapping("/{productId}")
     public ResponseEntity<Product> findProductById(@PathVariable int productId){
         try{
@@ -56,7 +75,14 @@ public class ProductController {
         }
     }
 
-    //Create a new Product
+    /**
+     * Creates a new product.
+     *
+     * @param dto the request body containing product creation details.
+     * @return HTTP 201 with the created product,
+     *         HTTP 400 if validation fails,
+     *         HTTP 500 for server errors.
+     */
     @PostMapping
     public ResponseEntity<Product> createProduct(
         @RequestBody CreateProductRequest dto){
@@ -69,7 +95,16 @@ public class ProductController {
         }
     }
     
-    //Update a product
+    /**
+     * Updates an existing product.
+     *
+     * @param productId the ID of the product to update.
+     * @param dto       the request body containing updated fields.
+     * @return HTTP 200 with the updated product,
+     *         HTTP 404 if not found,
+     *         HTTP 400 for invalid input,
+     *         HTTP 500 for errors.
+     */
     @PutMapping("/{productId}")
     public ResponseEntity<Product> updateProduct(@PathVariable int productId, @RequestBody UpdateProductRequest dto){
         try{
@@ -83,7 +118,15 @@ public class ProductController {
         }
     }
 
-    //Delete a Product
+    /**
+     * Deletes a product by its ID.
+     *
+     * @param productId the ID of the product to delete.
+     * @return HTTP 204 upon successful deletion,
+     *         HTTP 404 if the product does not exist,
+     *         HTTP 400 for invalid ID,
+     *         HTTP 500 for unexpected errors.
+     */
     @DeleteMapping("/{productId}")
     public ResponseEntity<Void> deleteProduct(@PathVariable int productId){
         try{

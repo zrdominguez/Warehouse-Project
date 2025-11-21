@@ -16,6 +16,14 @@ import com.skillstorm.project1.backend.models.Section;
 import com.skillstorm.project1.backend.services.SectionProductService;
 import com.skillstorm.project1.backend.services.SectionService;
 
+/**
+ * REST controller for managing warehouse sections and the
+ * products stored inside them.
+ *
+ * Provides endpoints to:
+ * - Retrieve a section by ID
+ * - Update the quantity of a product inside a section
+ */
 @RestController
 @RequestMapping("/section")
 @CrossOrigin(origins = "http://localhost:5173")
@@ -29,7 +37,16 @@ public class SectionController {
         this.sectionProductService = sectionProductService;
     }
 
-    //find section by id
+    /**
+     * Retrieves a section by its ID.
+     *
+     * @param sectionId the ID of the section to retrieve
+     * @return ResponseEntity containing the Section and HTTP 200,
+     *         or an error response:
+     *         - 404 if section not found
+     *         - 400 for validation issues
+     *         - 500 for unexpected errors
+     */
     @GetMapping("/{sectionId}")
     public ResponseEntity<Section>  findSectionById(@PathVariable int sectionId){
         try{
@@ -43,7 +60,18 @@ public class SectionController {
         }
     }
     
-    //Update quantity in section
+    /**
+     * Updates the quantity of a specific product inside a section.
+     *
+     * @param sectionId the ID of the section containing the product
+     * @param productId the ID of the product being updated
+     * @param dto the request body containing the new quantity
+     * @return ResponseEntity with:
+     *         - 204 No Content on success
+     *         - 404 if section or product is not found
+     *         - 400 for validation issues
+     *         - 500 for unexpected errors
+     */
     @PutMapping("/{sectionId}/products/{productId}")
     public ResponseEntity<Void> updateQuantity(@PathVariable int sectionId, @PathVariable int productId, @RequestBody UpdateQuantityRequest dto){
         try{

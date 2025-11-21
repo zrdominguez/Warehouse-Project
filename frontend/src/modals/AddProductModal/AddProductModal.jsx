@@ -34,7 +34,7 @@ export default function AddProductModal({ open, onClose, onSubmit, products}) {
               className="bg-gray-400" 
               key={product.id} 
               value={product.id}>
-                {product.name}
+                {`${product.name} (${product.productType})`}
               </option>
             ))}
           </select>

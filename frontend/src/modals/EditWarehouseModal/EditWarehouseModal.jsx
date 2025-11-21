@@ -6,14 +6,13 @@ const WAREHOUSETYPES = ["INSTRUMENTS"];
 export default function EditWarehouseModal({open, onClose, onSubmit, warehouse}) {
     
     const [name, setName] = useState(warehouse.name);
-    const [warehouseType, setWarehouseType] = useState(warehouse.warehouseType);
     const [capacity, setCapacity] = useState(warehouse.capacity);
     const [location, setLocation] = useState(warehouse.location);
 
     const handleSubmit = e => {
         e.preventDefault();
        
-        onSubmit({userId : 1, name, warehouseType, capacity, location}, warehouse.id);
+        onSubmit({userId : 1, name, ...warehouse.warehouseType, capacity, location}, warehouse.id);
         onClose();
     }
 
@@ -28,26 +27,6 @@ export default function EditWarehouseModal({open, onClose, onSubmit, warehouse})
                 value={name}
                 onChange={e => setName(e.target.value)}
                 />
-            </div>
-
-            <div>
-                <label className="block mb-1 font-medium">Type</label>
-                <select
-                    className="w-full border rounded-md px-3 py-2"
-                    value={warehouseType}
-                    onChange={e => setWarehouseType(e.target.value)}
-                    required
-                >
-                    <option value="" disabled>Select a Type</option>
-                    {WAREHOUSETYPES.map((type, index) => (
-                        <option
-                        className="bg-gray-400" 
-                        key={index}
-                        value={type}>
-                            {type}
-                        </option>
-                    ))}
-                </select>
             </div>
 
             <div>
