@@ -33,8 +33,21 @@ export default function ProductList({products, loadProducts}) {
     return <p className="text-gray-500">No products available.</p>;
   }
 
+  // --- GROUP PRODUCTS ---
+  const instrumentProducts = products.filter((p) =>
+    ["STRING", "BRASS", "WOODWIND", "PERCUSSION"].includes(p.productType)
+  );
+
+  const bookProducts = products.filter((p) =>
+    ["DRAMA", "ROMANCE", "NONFICTION", "HORROR", "MYSTERY"].includes(p.productType)
+  );
+
+  const electronicProducts = products.filter((p) =>
+    ["LAPTOPS", "SMARTPHONES", "GAME_CONSOLES"].includes(p.productType)
+  );
+
   return (
-    <div className="grid grid-cols-3 gap-6">
+    <div>
       <CreateProductModal
       open={openModal}
       onClose={() => setOpenModal(false)}
@@ -48,9 +61,39 @@ export default function ProductList({products, loadProducts}) {
         <span className="text-4xl font-bold">+</span>
         <span className="mt-2">Create Product</span>
       </button>
-      {products.map(product => (
-        <ProductCard key={product.id} product={product} loadProducts={loadProducts}/>
-      ))}
+
+      {/* ------------------- INSTRUMENTS ------------------- */}
+      <h2 className="text-2xl font-bold mb-4">Instruments</h2>
+      <div className="grid grid-cols-3 gap-6 mb-10">
+        {instrumentProducts.length === 0 && (
+          <p className="text-gray-400 col-span-3">No instrument products.</p>
+        )}
+        {instrumentProducts.map((product) => (
+          <ProductCard key={product.id} product={product} loadProducts={loadProducts} />
+        ))}
+      </div>
+
+      {/* ------------------- BOOKS ------------------- */}
+      <h2 className="text-2xl font-bold mb-4">Books</h2>
+      <div className="grid grid-cols-3 gap-6 mb-10">
+        {bookProducts.length === 0 && (
+          <p className="text-gray-400 col-span-3">No book products.</p>
+        )}
+        {bookProducts.map((product) => (
+          <ProductCard key={product.id} product={product} loadProducts={loadProducts} />
+        ))}
+      </div>
+
+      {/* ------------------- ELECTRONICS ------------------- */}
+      <h2 className="text-2xl font-bold mb-4">Electronics</h2>
+      <div className="grid grid-cols-3 gap-6">
+        {electronicProducts.length === 0 && (
+          <p className="text-gray-400 col-span-3">No electronic products.</p>
+        )}
+        {electronicProducts.map((product) => (
+          <ProductCard key={product.id} product={product} loadProducts={loadProducts} />
+        ))}
+      </div>
     </div>
   );
 }
