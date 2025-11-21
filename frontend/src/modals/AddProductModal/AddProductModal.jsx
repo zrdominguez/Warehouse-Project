@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Modal from "../Modal";
 
-export default function AddProductModal({ open, onClose, onSubmit, products}) {
+export default function AddProductModal({ open, onClose, onSubmit, products, warehouseId, sectionId}) {
   const [quantity, setQuantity] = useState(1);
   const [productId, setProductId] = useState("");
  
@@ -12,7 +12,7 @@ export default function AddProductModal({ open, onClose, onSubmit, products}) {
 
   const handleSubmit = e => {
     e.preventDefault();
-    onSubmit({ quantity, productId });
+    onSubmit({ quantity, productId }, warehouseId, sectionId);
     reset();
     onClose();
   };
