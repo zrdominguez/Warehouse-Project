@@ -11,8 +11,8 @@ export default function EditWarehouseModal({open, onClose, onSubmit, warehouse})
     const [location, setLocation] = useState(warehouse.location);
 
     const handleSubmit = e => {
-        e.preventDefault({userId : 1, name, warehouseType, capacity, location});
-        console.log()
+        e.preventDefault();
+       
         onSubmit({userId : 1, name, warehouseType, capacity, location}, warehouse.id);
         onClose();
     }

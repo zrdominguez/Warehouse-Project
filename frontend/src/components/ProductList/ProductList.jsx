@@ -1,8 +1,11 @@
 import "./ProductList.css"
 
 import ProductCard from "../ProductCard";
+import { useState } from "react";
 
 export default function ProductList({products, loadProducts}) {
+  const [error, setError] = useState(null);
+  
   if (!products || products.length === 0) {
     return <p className="text-gray-500">No products available.</p>;
   }

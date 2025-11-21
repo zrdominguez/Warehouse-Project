@@ -31,7 +31,8 @@ public class Product {
 
     @Column(nullable = false, length = 100)
     private String name;
-
+    
+    
     @Column(nullable = false, length = 10)
     private String sku;
 
