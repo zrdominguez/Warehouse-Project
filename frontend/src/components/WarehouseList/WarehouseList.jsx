@@ -38,9 +38,6 @@ export default function WarehouseList({warehouses, loadWarehouses, setError}) {
             <h1 className="text-xl font-semibold mb-3">Warehouses</h1>
 
             <div className="grid grid-cols-6 gap-4">
-                {warehouses.map((warehouse) => (
-                <WarehouseCard key={warehouse.id} warehouse={warehouse} loadWarehouses={loadWarehouses} setError={setError}/>
-                ))}
                 <button
                     className="flex flex-col items-center justify-center border-2 border-gray-400 h-40 rounded-xl p-6 hover:bg-orange-300 transition cursor-pointer"
                     onClick={()=> setOpenModal(true)}
@@ -48,6 +45,9 @@ export default function WarehouseList({warehouses, loadWarehouses, setError}) {
                     <span className="text-4xl font-bold">+</span>
                     <span className="mt-2">Add Warehouse</span>
                 </button>
+                {warehouses.map((warehouse) => (
+                <WarehouseCard key={warehouse.id} warehouse={warehouse} loadWarehouses={loadWarehouses} setError={setError}/>
+                ))}
             </div>
         </div>
   );

@@ -22,24 +22,6 @@ export default function EditProductModal({open, onClose, onSubmit, product}) {
         onClose();
     }
 
-    // const handleSkuChange = (e) => {
-    //     let value = e.target.value.toUpperCase();
-
-    //     // Hard limit: max 10 characters total
-    //     if (value.length > 10) value = value.slice(0, 10);
-
-    //     setSku(value);
-
-    //     // Validate: PDR-XXXXXX   (letters/numbers only)
-    //     const validFormat = /^PDR-[A-Z0-9]{6}$/.test(value);
-
-    //     if (value.length === 10 && !validFormat) {
-    //       setSkuError("SKU must be in format PDR-XXXXXX");
-    //     } else {
-    //       setSkuError("");
-    //     }
-    // };
-
     return (
     <Modal open={open} onClose={onClose} title="Edit Product">
         <form onSubmit={handleSubmit} className="space-y-4">
